@@ -74,6 +74,20 @@ func TestParseErrors(t *testing.T) {
 	})
 }
 
+func TestStatementSeparators(t *testing.T) {
+	Convey("Given semicolon-separated statements", t, func() {
+		Convey("When parsing a single line and a header with inline statements", func() {
+			g, err := parse("graph TD; A --> B; B --> C")
+
+			Convey("Then all nodes and edges are parsed", func() {
+				So(err, ShouldBeNil)
+				So(len(g.Nodes), ShouldEqual, 3)
+				So(len(g.Edges), ShouldEqual, 2)
+			})
+		})
+	})
+}
+
 func TestFlowchartKeyword(t *testing.T) {
 	Convey("Given the 'flowchart' keyword", t, func() {
 		g, err := parse("flowchart LR\nA --> B")

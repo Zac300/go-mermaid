@@ -35,6 +35,10 @@ func (l *lexer) run() ([]Token, error) {
 		case r == '\n':
 			toks = append(toks, l.emit(Newline, "\n"))
 			l.advance()
+		case r == ';':
+			// Statement separator, equivalent to a newline.
+			toks = append(toks, l.emit(Newline, ";"))
+			l.advance()
 		case r == '\r':
 			l.advance()
 		case r == ' ' || r == '\t':
