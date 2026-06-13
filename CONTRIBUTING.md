@@ -19,14 +19,22 @@ Useful targets (`make help` lists all):
 
 ## Architecture
 
-The pipeline is `lexer → parser → domain.Graph → layout → render`:
+The public `Render` detects the diagram type from the header and dispatches.
+Flowcharts use the staged pipeline `lexer → parser → domain.Graph → layout →
+render`:
 
-- `internal/domain` — the pure diagram model. No I/O, no third-party deps.
+- `internal/domain` — the pure flowchart model. No I/O, no third-party deps.
 - `internal/lexer` — source text to tokens.
-- `internal/parser` — tokens to a `domain.Graph`.
+- `internal/parser` — tokens to a `domain.Graph` (plus styling/link preprocess).
 - `internal/layout` — Sugiyama-style layered layout (acyclic → rank → order → position).
 - `internal/render` — laid-out graph to SVG.
 - `internal/syntax` — shared positional error type.
+- `internal/theme`, `internal/svgutil` — palettes and SVG helpers shared by all renderers.
+
+Every other diagram type (sequence, class, state, er, pie, journey, quadrant,
+git, timeline, mindmap, gantt, c4, requirement, sankey) is a self-contained
+`internal/<type>` package that parses, lays out, and renders its own SVG, wired
+into the root dispatch. Several reuse `internal/layout` for node positioning.
 
 Keep stages decoupled: a change to rendering shouldn't require touching the
 parser, and vice versa.

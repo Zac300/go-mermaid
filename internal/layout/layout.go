@@ -1,9 +1,8 @@
 // Package layout assigns coordinates to a domain.Graph using a layered
 // (Sugiyama-style) approach: make the graph acyclic, rank nodes into layers,
 // insert dummy nodes so long edges can bend, order within layers to reduce
-// crossings, then assign positions with a barycenter heuristic. v0 uses
-// longest-path ranking; network-simplex can replace it behind the same
-// interface.
+// crossings, then assign positions with a barycenter heuristic. Ranking is
+// longest-path; network-simplex can replace it behind the same interface.
 package layout
 
 import (
