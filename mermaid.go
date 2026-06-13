@@ -22,6 +22,7 @@ package mermaid
 
 import (
 	"fmt"
+	"io"
 
 	"github.com/Zac300/go-mermaid/internal/class"
 	"github.com/Zac300/go-mermaid/internal/er"
@@ -139,6 +140,17 @@ func Render(src string, opts ...Option) (out []byte, err error) {
 		a11yTitle = title
 	}
 	return injectA11y(raw, a11yTitle, accDescr), nil
+}
+
+// RenderTo renders src and writes the SVG to w. It is a convenience over
+// Render for HTTP handlers and file pipelines.
+func RenderTo(w io.Writer, src string, opts ...Option) error {
+	svg, err := Render(src, opts...)
+	if err != nil {
+		return err
+	}
+	_, err = w.Write(svg)
+	return err
 }
 
 // wrapParse tags a sub-renderer error as a parse-stage failure.

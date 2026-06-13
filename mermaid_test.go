@@ -56,6 +56,26 @@ func TestRender(t *testing.T) {
 			})
 		})
 
+		Convey("When using RenderTo with a writer", func() {
+			var buf strings.Builder
+			err := mermaid.RenderTo(&buf, "graph TD\nA-->B")
+
+			Convey("Then the SVG is written to the writer", func() {
+				So(err, ShouldBeNil)
+				So(buf.String(), ShouldStartWith, "<svg")
+			})
+		})
+
+		Convey("When RenderTo gets invalid source", func() {
+			var buf strings.Builder
+			err := mermaid.RenderTo(&buf, "graph TD\nA[oops")
+
+			Convey("Then it returns the error and writes nothing", func() {
+				So(err, ShouldNotBeNil)
+				So(buf.Len(), ShouldEqual, 0)
+			})
+		})
+
 		Convey("When the source has a front-matter title", func() {
 			out, err := mermaid.Render("---\ntitle: Pipeline\n---\ngraph LR\nA-->B")
 
