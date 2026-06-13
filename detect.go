@@ -14,6 +14,7 @@ const (
 	kindState
 	kindER
 	kindJourney
+	kindQuadrant
 )
 
 // detectKind inspects the first non-empty, non-comment line and maps its
@@ -41,6 +42,8 @@ func detectKind(src string) kind {
 			return kindER
 		case "journey":
 			return kindJourney
+		case "quadrantchart":
+			return kindQuadrant
 		default:
 			return kindUnknown
 		}

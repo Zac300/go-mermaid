@@ -1,0 +1,26 @@
+<svg role="img" xmlns="http://www.w3.org/2000/svg" width="404" height="435.6" viewBox="0 0 404 435.6" font-family="sans-serif" font-size="14">
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <text x="202" y="30" fill="#333333" text-anchor="middle" font-weight="bold">Reach and engagement</text>
+  <rect x="202" y="73.6" width="160" height="160" fill="#e8f5e9"/>
+  <rect x="42" y="73.6" width="160" height="160" fill="#fff8e1"/>
+  <rect x="42" y="233.6" width="160" height="160" fill="#fbe9e7"/>
+  <rect x="202" y="233.6" width="160" height="160" fill="#e3f2fd"/>
+  <rect x="42" y="73.6" width="320" height="320" fill="none" stroke="#9370DB"/>
+  <line x1="202" y1="73.6" x2="202" y2="393.6" stroke="#9370DB"/><line x1="42" y1="233.6" x2="362" y2="233.6" stroke="#9370DB"/>
+  <text x="282" y="89.6" fill="#333333" text-anchor="middle">We should expand</text>
+  <text x="122" y="89.6" fill="#333333" text-anchor="middle">Need to promote</text>
+  <text x="122" y="249.6" fill="#333333" text-anchor="middle">Re-evaluate</text>
+  <text x="282" y="249.6" fill="#333333" text-anchor="middle">May be improved</text>
+  <text x="42" y="411.6" fill="#333333" text-anchor="start">Low Reach</text>
+  <text x="362" y="411.6" fill="#333333" text-anchor="end">High Reach</text>
+  <text x="36" y="393.6" fill="#333333" text-anchor="end">Low Engagement</text>
+  <text x="36" y="87.6" fill="#333333" text-anchor="end">High Engagement</text>
+  <circle cx="138" cy="201.6" r="6" fill="#ECECFF" stroke="#9370DB"/>
+  <text x="147" y="206.5" fill="#333333">Campaign A</text>
+  <circle cx="186" cy="320" r="6" fill="#ECECFF" stroke="#9370DB"/>
+  <text x="195" y="324.9" fill="#333333">Campaign B</text>
+  <circle cx="224.4" cy="172.8" r="6" fill="#ECECFF" stroke="#9370DB"/>
+  <text x="233.4" y="177.7" fill="#333333">Campaign C</text>
+  <circle cx="291.6" cy="284.8" r="6" fill="#ECECFF" stroke="#9370DB"/>
+  <text x="300.6" y="289.7" fill="#333333">Campaign D</text>
+</svg>

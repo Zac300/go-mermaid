@@ -30,6 +30,7 @@ import (
 	"github.com/Zac300/go-mermaid/internal/lexer"
 	"github.com/Zac300/go-mermaid/internal/parser"
 	"github.com/Zac300/go-mermaid/internal/pie"
+	"github.com/Zac300/go-mermaid/internal/quadrant"
 	"github.com/Zac300/go-mermaid/internal/render"
 	"github.com/Zac300/go-mermaid/internal/sequence"
 	"github.com/Zac300/go-mermaid/internal/state"
@@ -94,6 +95,11 @@ func Render(src string, opts ...Option) (out []byte, err error) {
 		err = wrapParse(err)
 	case kindJourney:
 		raw, err = journey.Render(body, journey.RenderOptions{
+			Theme: string(cfg.theme), FontFace: cfg.fontFace, FontSize: cfg.fontSize, Padding: cfg.padding, Title: title,
+		})
+		err = wrapParse(err)
+	case kindQuadrant:
+		raw, err = quadrant.Render(body, quadrant.RenderOptions{
 			Theme: string(cfg.theme), FontFace: cfg.fontFace, FontSize: cfg.fontSize, Padding: cfg.padding, Title: title,
 		})
 		err = wrapParse(err)
