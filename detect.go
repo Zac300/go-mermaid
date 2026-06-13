@@ -20,6 +20,7 @@ const (
 	kindMindmap
 	kindGantt
 	kindC4
+	kindRequirement
 )
 
 // detectKind inspects the first non-empty, non-comment line and maps its
@@ -60,6 +61,8 @@ func detectKind(src string) kind {
 			return kindMindmap
 		case "gantt":
 			return kindGantt
+		case "requirementdiagram":
+			return kindRequirement
 		default:
 			return kindUnknown
 		}

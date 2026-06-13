@@ -40,6 +40,7 @@ import (
 	"github.com/Zac300/go-mermaid/internal/pie"
 	"github.com/Zac300/go-mermaid/internal/quadrant"
 	"github.com/Zac300/go-mermaid/internal/render"
+	"github.com/Zac300/go-mermaid/internal/requirement"
 	"github.com/Zac300/go-mermaid/internal/sequence"
 	"github.com/Zac300/go-mermaid/internal/state"
 	"github.com/Zac300/go-mermaid/internal/syntax"
@@ -134,6 +135,11 @@ func Render(src string, opts ...Option) (out []byte, err error) {
 		err = wrapParse(err)
 	case kindC4:
 		raw, err = c4.Render(body, c4.RenderOptions{
+			Theme: string(cfg.theme), FontFace: cfg.fontFace, FontSize: cfg.fontSize, Padding: cfg.padding, Title: title,
+		})
+		err = wrapParse(err)
+	case kindRequirement:
+		raw, err = requirement.Render(body, requirement.RenderOptions{
 			Theme: string(cfg.theme), FontFace: cfg.fontFace, FontSize: cfg.fontSize, Padding: cfg.padding, Title: title,
 		})
 		err = wrapParse(err)
