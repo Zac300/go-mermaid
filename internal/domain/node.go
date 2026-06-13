@@ -1,5 +1,12 @@
 package domain
 
+// Style holds optional per-node visual overrides from classDef/class/style.
+type Style struct {
+	Fill   string
+	Stroke string
+	Color  string // text color
+}
+
 // Node is a vertex in a flowchart.
 type Node struct {
 	// ID is the unique identifier from the source (e.g. "A").
@@ -8,6 +15,8 @@ type Node struct {
 	Label string
 	// Shape is the node outline style.
 	Shape Shape
+	// Style holds optional color overrides; nil means use the theme.
+	Style *Style
 
 	// Pos is the laid-out top-left position. Zero until layout runs.
 	Pos Point

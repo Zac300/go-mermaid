@@ -130,6 +130,8 @@ func Render(src string, opts ...Option) (out []byte, err error) {
 }
 
 func renderFlowchart(src string, cfg config, title string) ([]byte, error) {
+	src, styles := parser.Preprocess(src)
+
 	tokens, err := lexer.Lex(src)
 	if err != nil {
 		return nil, fmt.Errorf("%w: %w", ErrParse, err)
@@ -138,6 +140,12 @@ func renderFlowchart(src string, cfg config, title string) ([]byte, error) {
 	graph, err := parser.Parse(tokens)
 	if err != nil {
 		return nil, fmt.Errorf("%w: %w", ErrParse, err)
+	}
+
+	for id, st := range styles {
+		if n := graph.NodeByID(id); n != nil {
+			n.Style = st
+		}
 	}
 
 	laid, err := layout.Compute(graph, cfg.layout())

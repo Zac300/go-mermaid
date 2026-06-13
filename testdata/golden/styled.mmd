@@ -1,0 +1,7 @@
+graph LR
+A[Start]:::ok --> B{Check}
+B -->|pass| C[Done]:::ok
+B -->|fail| D[Retry]:::bad
+classDef ok fill:#dfd,stroke:#393,color:#063
+classDef bad fill:#fdd,stroke:#933,color:#900
+style B fill:#ffd,stroke:#aa0
