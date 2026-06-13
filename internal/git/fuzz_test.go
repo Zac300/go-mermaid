@@ -7,7 +7,7 @@ func FuzzParse(f *testing.F) {
 	f.Add("gitGraph\nmerge nothing")
 	f.Add("gitGraph:")
 	f.Add("gitGraph")
-	f.Fuzz(func(t *testing.T, src string) {
+	f.Fuzz(func(_ *testing.T, src string) {
 		_, _ = Parse(src)
 	})
 }

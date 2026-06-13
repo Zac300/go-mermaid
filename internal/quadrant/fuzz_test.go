@@ -7,7 +7,7 @@ func FuzzParse(f *testing.F) {
 	f.Add("quadrantChart\nP: []")
 	f.Add("quadrantChart\nP: [1]")
 	f.Add("quadrantChart")
-	f.Fuzz(func(t *testing.T, src string) {
+	f.Fuzz(func(_ *testing.T, src string) {
 		_, _ = Parse(src)
 	})
 }

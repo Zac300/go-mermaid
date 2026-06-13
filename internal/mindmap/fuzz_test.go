@@ -7,7 +7,7 @@ func FuzzParse(f *testing.F) {
 	f.Add("mindmap\nroot")
 	f.Add("mindmap\n      deep\n  shallow")
 	f.Add("mindmap")
-	f.Fuzz(func(t *testing.T, src string) {
+	f.Fuzz(func(_ *testing.T, src string) {
 		_, _ = Parse(src)
 	})
 }
