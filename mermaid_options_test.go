@@ -33,6 +33,15 @@ func TestOptions(t *testing.T) {
 			So(height(loose), ShouldBeGreaterThan, height(tight))
 		})
 
+		Convey("When enabling curved edges on a graph that needs bends", func() {
+			out, err := mermaid.Render("graph TD\nA-->B\nA-->C", mermaid.WithCurvedEdges(true))
+
+			Convey("Then edges use quadratic curve commands", func() {
+				So(err, ShouldBeNil)
+				So(string(out), ShouldContainSubstring, "Q")
+			})
+		})
+
 		Convey("When using the neutral theme", func() {
 			out, err := mermaid.Render(src, mermaid.WithTheme(mermaid.Neutral))
 			So(err, ShouldBeNil)

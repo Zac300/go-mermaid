@@ -20,6 +20,21 @@ type Options struct {
 	FontSize float64
 	Padding  float64
 	Title    string
+	Curved   bool
+}
+
+// smoothPath builds a quadratic-smoothed path through the waypoints, rounding
+// the interior corners of an orthogonal polyline.
+func smoothPath(pts []domain.Point) string {
+	var b strings.Builder
+	fmt.Fprintf(&b, "M%s,%s ", num(pts[0].X), num(pts[0].Y))
+	for i := 1; i < len(pts); i++ {
+		mx, my := (pts[i-1].X+pts[i].X)/2, (pts[i-1].Y+pts[i].Y)/2
+		fmt.Fprintf(&b, "Q%s,%s %s,%s ", num(pts[i-1].X), num(pts[i-1].Y), num(mx), num(my))
+	}
+	last := pts[len(pts)-1]
+	fmt.Fprintf(&b, "L%s,%s", num(last.X), num(last.Y))
+	return strings.TrimSpace(b.String())
 }
 
 // writeTitle draws a centered, bold diagram title at (x, y) if non-empty.
@@ -76,7 +91,7 @@ func SVG(res *layout.Result, opts Options) ([]byte, error) {
 		writeSubgraph(&b, sg, res.Graph, pal, opts)
 	}
 	for _, e := range res.Graph.Edges {
-		writeEdge(&b, e, pal)
+		writeEdge(&b, e, pal, opts.Curved)
 	}
 	for _, n := range res.Graph.Nodes {
 		writeNode(&b, n, pal, opts)
@@ -86,17 +101,21 @@ func SVG(res *layout.Result, opts Options) ([]byte, error) {
 	return []byte(b.String()), nil
 }
 
-func writeEdge(b *strings.Builder, e *domain.Edge, pal theme.Palette) {
+func writeEdge(b *strings.Builder, e *domain.Edge, pal theme.Palette, curved bool) {
 	if len(e.Points) < 2 {
 		return
 	}
 	var d strings.Builder
-	for i, p := range e.Points {
-		cmd := "L"
-		if i == 0 {
-			cmd = "M"
+	if curved && len(e.Points) > 2 {
+		d.WriteString(smoothPath(e.Points))
+	} else {
+		for i, p := range e.Points {
+			cmd := "L"
+			if i == 0 {
+				cmd = "M"
+			}
+			fmt.Fprintf(&d, "%s%s,%s ", cmd, num(p.X), num(p.Y))
 		}
-		fmt.Fprintf(&d, "%s%s,%s ", cmd, num(p.X), num(p.Y))
 	}
 	dash := ""
 	if e.Arrow == domain.ArrowDotted {

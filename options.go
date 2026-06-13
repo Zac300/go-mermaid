@@ -56,6 +56,7 @@ type config struct {
 	padding  float64
 	nodeSep  float64 // horizontal gap between nodes in a rank
 	rankSep  float64 // gap between ranks
+	curved   bool    // render flowchart edges as smooth curves
 }
 
 func defaultConfig() config {
@@ -83,6 +84,7 @@ func (c config) render() render.Options {
 		FontFace: c.fontFace,
 		FontSize: c.fontSize,
 		Padding:  c.padding,
+		Curved:   c.curved,
 	}
 }
 
@@ -111,4 +113,10 @@ func WithSpacing(nodeSep, rankSep float64) Option {
 		c.nodeSep = nodeSep
 		c.rankSep = rankSep
 	}
+}
+
+// WithCurvedEdges renders flowchart edges as smooth curves instead of
+// straight orthogonal segments.
+func WithCurvedEdges(on bool) Option {
+	return func(c *config) { c.curved = on }
 }
