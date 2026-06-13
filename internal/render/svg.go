@@ -4,6 +4,7 @@ package render
 
 import (
 	"fmt"
+	"math"
 	"strings"
 
 	"github.com/Zac300/go-mermaid/internal/domain"
@@ -37,12 +38,22 @@ func SVG(res *layout.Result, opts Options) ([]byte, error) {
 	pad := opts.Padding
 	titleH := svgutil.TitleHeight(opts.Title, opts.FontSize)
 
-	contentW := res.Width
+	// Union node bounds with subgraph boxes (which can extend past the nodes
+	// and into negative coordinates) so nothing clips.
+	minX, minY, maxX, maxY := 0.0, 0.0, res.Width, res.Height
+	for _, sg := range res.Graph.Subgraphs {
+		if bx, by, bw, bh, ok := subgraphBox(sg, res.Graph, opts); ok {
+			minX, minY = math.Min(minX, bx), math.Min(minY, by)
+			maxX, maxY = math.Max(maxX, bx+bw), math.Max(maxY, by+bh)
+		}
+	}
+	contentW := maxX - minX
 	if tw := opts.FontSize * 0.6 * float64(len([]rune(opts.Title))); tw > contentW {
 		contentW = tw
 	}
+	shiftX, shiftY := -minX, -minY
 	w := contentW + pad*2
-	h := res.Height + titleH + pad*2
+	h := (maxY - minY) + titleH + pad*2
 
 	var b strings.Builder
 	fmt.Fprintf(&b, `<svg xmlns="http://www.w3.org/2000/svg" width="%s" height="%s" viewBox="0 0 %s %s" font-family="%s" font-size="%s">`,
@@ -58,9 +69,12 @@ func SVG(res *layout.Result, opts Options) ([]byte, error) {
 
 	writeTitle(&b, opts.Title, w/2, pad+opts.FontSize, pal)
 
-	fmt.Fprintf(&b, `  <g transform="translate(%s,%s)">`, num(pad), num(pad+titleH))
+	fmt.Fprintf(&b, `  <g transform="translate(%s,%s)">`, num(pad+shiftX), num(pad+titleH+shiftY))
 	b.WriteByte('\n')
 
+	for _, sg := range res.Graph.Subgraphs {
+		writeSubgraph(&b, sg, res.Graph, pal, opts)
+	}
 	for _, e := range res.Graph.Edges {
 		writeEdge(&b, e, pal)
 	}
@@ -107,6 +121,55 @@ func writeEdge(b *strings.Builder, e *domain.Edge, pal theme.Palette) {
 		midX, midY := (first.X+last.X)/2, (first.Y+last.Y)/2
 		fmt.Fprintf(b, `    <text x="%s" y="%s" fill="%s" text-anchor="middle" dy="-2">%s</text>`,
 			num(midX), num(midY), pal.Text, esc(e.Label))
+		b.WriteByte('\n')
+	}
+}
+
+// subgraphBox returns the cluster box (x, y, w, h) enclosing a subgraph's
+// member nodes, with padding and title space. ok is false if it has no
+// positioned members.
+func subgraphBox(sg *domain.Subgraph, g *domain.Graph, opts Options) (x, y, w, h float64, ok bool) {
+	const pad = 14.0
+	first := true
+	var minX, minY, maxX, maxY float64
+	for _, id := range sg.NodeIDs {
+		n := g.NodeByID(id)
+		if n == nil {
+			continue
+		}
+		if first {
+			minX, minY = n.Pos.X, n.Pos.Y
+			maxX, maxY = n.Pos.X+n.Size.W, n.Pos.Y+n.Size.H
+			first = false
+			continue
+		}
+		minX = math.Min(minX, n.Pos.X)
+		minY = math.Min(minY, n.Pos.Y)
+		maxX = math.Max(maxX, n.Pos.X+n.Size.W)
+		maxY = math.Max(maxY, n.Pos.Y+n.Size.H)
+	}
+	if first {
+		return 0, 0, 0, 0, false
+	}
+	titleH := 0.0
+	if sg.Title != "" {
+		titleH = opts.FontSize + 6
+	}
+	return minX - pad, minY - pad - titleH, maxX - minX + 2*pad, maxY - minY + 2*pad + titleH, true
+}
+
+// writeSubgraph draws a dashed cluster box around a subgraph's member nodes.
+func writeSubgraph(b *strings.Builder, sg *domain.Subgraph, g *domain.Graph, pal theme.Palette, opts Options) {
+	x, y, w, h, ok := subgraphBox(sg, g, opts)
+	if !ok {
+		return
+	}
+	fmt.Fprintf(b, `    <rect x="%s" y="%s" width="%s" height="%s" fill="none" stroke="%s" stroke-dasharray="4,3" rx="4"/>`,
+		num(x), num(y), num(w), num(h), pal.NodeStroke)
+	b.WriteByte('\n')
+	if sg.Title != "" {
+		fmt.Fprintf(b, `    <text x="%s" y="%s" fill="%s">%s</text>`,
+			num(x+6), num(y+opts.FontSize), pal.Text, esc(sg.Title))
 		b.WriteByte('\n')
 	}
 }

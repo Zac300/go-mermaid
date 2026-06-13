@@ -18,10 +18,11 @@ func Parse(toks []lexer.Token) (*domain.Graph, error) {
 }
 
 type parser struct {
-	toks  []lexer.Token
-	pos   int
-	graph *domain.Graph
-	seen  map[string]*domain.Node
+	toks     []lexer.Token
+	pos      int
+	graph    *domain.Graph
+	seen     map[string]*domain.Node
+	subStack []*domain.Subgraph
 }
 
 func (p *parser) parse() (*domain.Graph, error) {
@@ -38,11 +39,46 @@ func (p *parser) parse() (*domain.Graph, error) {
 		if p.at(lexer.EOF) {
 			break
 		}
+		if p.cur().Kind == lexer.Keyword && p.cur().Val == "subgraph" {
+			p.parseSubgraph()
+			continue
+		}
+		if p.cur().Kind == lexer.Keyword && p.cur().Val == "end" {
+			p.next()
+			if n := len(p.subStack); n > 0 {
+				p.subStack = p.subStack[:n-1]
+			}
+			continue
+		}
 		if err := p.parseStatement(); err != nil {
 			return nil, err
 		}
 	}
 	return p.graph, nil
+}
+
+// parseSubgraph reads "subgraph [id] [\[title\]]" and pushes a subgraph that
+// subsequent newly-declared nodes join until a matching "end".
+func (p *parser) parseSubgraph() {
+	p.next() // subgraph
+	sg := &domain.Subgraph{}
+	if p.at(lexer.Ident) {
+		sg.ID = p.cur().Val
+		sg.Title = sg.ID
+		p.next()
+	}
+	if p.at(lexer.ShapeOpen) {
+		p.next()
+		if p.at(lexer.Text) {
+			sg.Title = p.cur().Val
+			p.next()
+		}
+		if p.at(lexer.ShapeClose) {
+			p.next()
+		}
+	}
+	p.graph.Subgraphs = append(p.graph.Subgraphs, sg)
+	p.subStack = append(p.subStack, sg)
 }
 
 func (p *parser) parseHeader() error {
@@ -136,6 +172,10 @@ func (p *parser) parseNodeRef() (*domain.Node, error) {
 		node = &domain.Node{ID: idTok.Val, Label: idTok.Val, Shape: domain.ShapeRect}
 		p.seen[idTok.Val] = node
 		p.graph.Nodes = append(p.graph.Nodes, node)
+		if n := len(p.subStack); n > 0 {
+			top := p.subStack[n-1]
+			top.NodeIDs = append(top.NodeIDs, node.ID)
+		}
 	}
 
 	if p.at(lexer.ShapeOpen) {

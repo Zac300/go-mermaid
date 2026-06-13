@@ -1,0 +1,9 @@
+graph TD
+subgraph ingest [Ingest]
+A[Fetch] --> B[Parse]
+end
+subgraph store [Store]
+C[(DB)] --> D[Index]
+end
+B --> C
+D --> E[Done]

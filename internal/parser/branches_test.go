@@ -149,6 +149,30 @@ func TestMiddleFormLabels(t *testing.T) {
 	})
 }
 
+func TestSubgraphs(t *testing.T) {
+	Convey("Given subgraphs with titles", t, func() {
+		src := "graph TD\nsubgraph one [Group One]\nA --> B\nend\nsubgraph two\nC --> D\nend\nB --> C"
+
+		Convey("When parsing", func() {
+			g, err := parse(src)
+
+			Convey("Then subgraphs capture their titles and members", func() {
+				So(err, ShouldBeNil)
+				So(len(g.Subgraphs), ShouldEqual, 2)
+				So(g.Subgraphs[0].Title, ShouldEqual, "Group One")
+				So(g.Subgraphs[0].NodeIDs, ShouldResemble, []string{"A", "B"})
+				So(g.Subgraphs[1].Title, ShouldEqual, "two")
+				So(g.Subgraphs[1].NodeIDs, ShouldResemble, []string{"C", "D"})
+			})
+
+			Convey("Then all nodes and the cross-subgraph edge exist", func() {
+				So(len(g.Nodes), ShouldEqual, 4)
+				So(len(g.Edges), ShouldEqual, 3)
+			})
+		})
+	})
+}
+
 func TestStatementSeparators(t *testing.T) {
 	Convey("Given semicolon-separated statements", t, func() {
 		Convey("When parsing a single line and a header with inline statements", func() {

@@ -17,12 +17,21 @@ const (
 	RightLeft Direction = "RL"
 )
 
+// Subgraph groups a set of nodes under an optional title. The renderer draws
+// a cluster box around the members' bounding region.
+type Subgraph struct {
+	ID      string
+	Title   string
+	NodeIDs []string
+}
+
 // Graph is a parsed flowchart, independent of layout or rendering.
 // Coordinates are not set until the layout stage populates them.
 type Graph struct {
 	Direction Direction
 	Nodes     []*Node
 	Edges     []*Edge
+	Subgraphs []*Subgraph
 }
 
 // NodeByID returns the node with the given id, or nil if absent.

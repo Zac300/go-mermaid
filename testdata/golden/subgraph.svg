@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="142" height="476" viewBox="0 0 142 476" font-family="sans-serif" font-size="14">
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#333333"/></marker></defs>
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <g transform="translate(30,50)">
+    <rect x="-14" y="-34" width="110" height="182" fill="none" stroke="#9370DB" stroke-dasharray="4,3" rx="4"/>
+    <text x="-8" y="-20" fill="#333333">Ingest</text>
+    <rect x="-14" y="150" width="110" height="182" fill="none" stroke="#9370DB" stroke-dasharray="4,3" rx="4"/>
+    <text x="-8" y="164" fill="#333333">Store</text>
+    <path d="M41,42 L41,92" fill="none" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <path d="M41,226 L41,276" fill="none" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <path d="M41,134 L41,184" fill="none" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <path d="M41,318 L41,368" fill="none" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <rect x="0" y="0" width="82" height="42" fill="#ECECFF" stroke="#9370DB"/>
+    <text fill="#333333" text-anchor="middle"><tspan x="41" y="25.9">Fetch</tspan></text>
+    <rect x="0" y="92" width="82" height="42" fill="#ECECFF" stroke="#9370DB"/>
+    <text fill="#333333" text-anchor="middle"><tspan x="41" y="117.9">Parse</tspan></text>
+    <path d="M12.6,189.04 L12.6,220.96 A28.4,5.04 0 0 0 69.4,220.96 A28.4,5.04 0 0 0 12.6,189.04 Z" fill="#ECECFF" stroke="#9370DB"/><path d="M12.6,189.04 A28.4,5.04 0 0 0 69.4,189.04" fill="none" stroke="#9370DB"/>
+    <text fill="#333333" text-anchor="middle"><tspan x="41" y="209.9">DB</tspan></text>
+    <rect x="0" y="276" width="82" height="42" fill="#ECECFF" stroke="#9370DB"/>
+    <text fill="#333333" text-anchor="middle"><tspan x="41" y="301.9">Index</tspan></text>
+    <rect x="4.2" y="368" width="73.6" height="42" fill="#ECECFF" stroke="#9370DB"/>
+    <text fill="#333333" text-anchor="middle"><tspan x="41" y="393.9">Done</tspan></text>
+  </g>
+</svg>
