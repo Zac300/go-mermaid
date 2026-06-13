@@ -19,6 +19,7 @@ const (
 	kindTimeline
 	kindMindmap
 	kindGantt
+	kindC4
 )
 
 // detectKind inspects the first non-empty, non-comment line and maps its
@@ -31,6 +32,9 @@ func detectKind(src string) kind {
 			continue
 		}
 		word := strings.TrimRight(strings.ToLower(firstField(line)), ":")
+		if strings.HasPrefix(word, "c4") {
+			return kindC4
+		}
 		switch word {
 		case "graph", "flowchart":
 			return kindFlowchart

@@ -1,0 +1,7 @@
+C4Context
+title System Context diagram for Internet Banking
+Person(customerA, "Banking Customer", "A customer of the bank")
+System(systemAA, "Internet Banking System", "Allows customers to view information")
+System_Ext(emailSystem, "E-mail System", "The internal email system")
+Rel(customerA, systemAA, "Uses")
+Rel(systemAA, emailSystem, "Sends notifications")

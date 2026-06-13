@@ -24,6 +24,7 @@ import (
 	"fmt"
 	"io"
 
+	"github.com/Zac300/go-mermaid/internal/c4"
 	"github.com/Zac300/go-mermaid/internal/class"
 	"github.com/Zac300/go-mermaid/internal/er"
 	"github.com/Zac300/go-mermaid/internal/gantt"
@@ -125,6 +126,11 @@ func Render(src string, opts ...Option) (out []byte, err error) {
 		err = wrapParse(err)
 	case kindGantt:
 		raw, err = gantt.Render(body, gantt.RenderOptions{
+			Theme: string(cfg.theme), FontFace: cfg.fontFace, FontSize: cfg.fontSize, Padding: cfg.padding, Title: title,
+		})
+		err = wrapParse(err)
+	case kindC4:
+		raw, err = c4.Render(body, c4.RenderOptions{
 			Theme: string(cfg.theme), FontFace: cfg.fontFace, FontSize: cfg.fontSize, Padding: cfg.padding, Title: title,
 		})
 		err = wrapParse(err)
