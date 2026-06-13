@@ -32,7 +32,7 @@ jobs:
         run: go test -race -coverprofile=coverage.txt -covermode=atomic ./...
       - name: Upload coverage
         if: matrix.os == 'ubuntu-latest' && matrix.go == '1.24'
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v7
         with:
           files: ./coverage.txt
           token: ${{ secrets.CODECOV_TOKEN }}
