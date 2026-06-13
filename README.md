@@ -130,6 +130,12 @@ source → lexer → parser → domain.Graph → layout → render → SVG
 The `internal/domain` package holds the pure model; each stage is an adapter
 that produces or consumes it. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
+## Releasing
+
+Releases are automated with release-please + GoReleaser, driven by Conventional
+Commits. See [RELEASING.md](RELEASING.md) for the versioning policy and the
+optional AI code-review setup.
+
 ## License
 
 [MIT](LICENSE) © Zac Krebbekx

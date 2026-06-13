@@ -26,6 +26,11 @@ archives:
 checksum:
   name_template: checksums.txt
 
+release:
+  # release-please already created the GitHub Release and tag; attach
+  # the built archives and checksums to it rather than creating a new one.
+  mode: append
+
 changelog:
   sort: asc
   filters:

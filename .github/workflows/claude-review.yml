@@ -1,0 +1,43 @@
+name: Claude Review
+
+# AI code review on each PR using the official /code-review skill, run via
+# the Claude Code GitHub Action. Authenticates with a Claude subscription
+# OAuth token (Pro/Max) stored as the CLAUDE_CODE_OAUTH_TOKEN secret.
+#
+# Until that secret is set the review step is skipped, so this workflow is
+# inert (and green) by default. Setup: see RELEASING.md / README.
+#
+# The guard also prevents the secret from being exposed to fork PRs.
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+  id-token: write
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check for review token
+        id: guard
+        run: echo "enabled=${{ secrets.CLAUDE_CODE_OAUTH_TOKEN != '' }}" >> "$GITHUB_OUTPUT"
+
+      - name: Checkout
+        if: steps.guard.outputs.enabled == 'true'
+        uses: actions/checkout@v6
+
+      - name: Claude code review
+        if: steps.guard.outputs.enabled == 'true'
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          plugin_marketplaces: "https://github.com/anthropics/claude-code.git"
+          plugins: "code-review@claude-code-plugins"
+          prompt: "/code-review:code-review ${{ github.repository }}/pull/${{ github.event.pull_request.number }}"
+          claude_args: |
+            --max-turns 15
+            --model claude-sonnet-4-6
