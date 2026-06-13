@@ -29,6 +29,7 @@ import (
 	"github.com/Zac300/go-mermaid/internal/journey"
 	"github.com/Zac300/go-mermaid/internal/layout"
 	"github.com/Zac300/go-mermaid/internal/lexer"
+	"github.com/Zac300/go-mermaid/internal/mindmap"
 	"github.com/Zac300/go-mermaid/internal/parser"
 	"github.com/Zac300/go-mermaid/internal/pie"
 	"github.com/Zac300/go-mermaid/internal/quadrant"
@@ -112,6 +113,11 @@ func Render(src string, opts ...Option) (out []byte, err error) {
 		err = wrapParse(err)
 	case kindTimeline:
 		raw, err = timeline.Render(body, timeline.RenderOptions{
+			Theme: string(cfg.theme), FontFace: cfg.fontFace, FontSize: cfg.fontSize, Padding: cfg.padding, Title: title,
+		})
+		err = wrapParse(err)
+	case kindMindmap:
+		raw, err = mindmap.Render(body, mindmap.RenderOptions{
 			Theme: string(cfg.theme), FontFace: cfg.fontFace, FontSize: cfg.fontSize, Padding: cfg.padding, Title: title,
 		})
 		err = wrapParse(err)

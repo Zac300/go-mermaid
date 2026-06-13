@@ -67,7 +67,7 @@ func TestRender(t *testing.T) {
 		})
 
 		Convey("When the diagram type is unsupported", func() {
-			_, err := mermaid.Render("mindmap\n  root((center))")
+			_, err := mermaid.Render("sankey-beta\n  a,b,1")
 
 			Convey("Then ErrUnsupported is returned", func() {
 				So(errors.Is(err, mermaid.ErrUnsupported), ShouldBeTrue)

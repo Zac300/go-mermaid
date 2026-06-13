@@ -17,6 +17,7 @@ const (
 	kindQuadrant
 	kindGit
 	kindTimeline
+	kindMindmap
 )
 
 // detectKind inspects the first non-empty, non-comment line and maps its
@@ -50,6 +51,8 @@ func detectKind(src string) kind {
 			return kindGit
 		case "timeline":
 			return kindTimeline
+		case "mindmap":
+			return kindMindmap
 		default:
 			return kindUnknown
 		}
