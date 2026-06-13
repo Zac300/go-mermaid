@@ -4,8 +4,10 @@
   <g transform="translate(16,16)">
     <path d="M82,67 L132,67" fill="none" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
     <path d="M214,67 L239,67 L239,21 L268.2,21" fill="none" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <rect x="221.3" y="30" width="39.6" height="18" fill="#ffffff"/>
     <text x="241.1" y="44" fill="#333333" text-anchor="middle" dy="-2">pass</text>
     <path d="M214,67 L239,67 L239,113 L264,113" fill="none" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <rect x="219.2" y="76" width="39.6" height="18" fill="#ffffff"/>
     <text x="239" y="90" fill="#333333" text-anchor="middle" dy="-2">fail</text>
     <rect x="0" y="46" width="82" height="42" fill="#dfd" stroke="#393"/>
     <text fill="#063" text-anchor="middle"><tspan x="41" y="71.9">Start</tspan></text>
