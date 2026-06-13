@@ -13,17 +13,28 @@ func TestGraphAndNode(t *testing.T) {
 		g := &Graph{Nodes: []*Node{a, b}}
 
 		Convey("When looking up an existing node", func() {
-			So(g.NodeByID("A"), ShouldEqual, a)
+			got := g.NodeByID("A")
+
+			Convey("Then it returns that node", func() {
+				So(got, ShouldEqual, a)
+			})
 		})
 
 		Convey("When looking up a missing node", func() {
-			So(g.NodeByID("Z"), ShouldBeNil)
+			got := g.NodeByID("Z")
+
+			Convey("Then it returns nil", func() {
+				So(got, ShouldBeNil)
+			})
 		})
 
 		Convey("When computing a node center", func() {
 			c := a.Center()
-			So(c.X, ShouldEqual, 30) // 10 + 40/2
-			So(c.Y, ShouldEqual, 35) // 20 + 30/2
+
+			Convey("Then it is the midpoint of the box", func() {
+				So(c.X, ShouldEqual, 30) // 10 + 40/2
+				So(c.Y, ShouldEqual, 35) // 20 + 30/2
+			})
 		})
 	})
 }

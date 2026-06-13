@@ -4,8 +4,9 @@ import (
 	"flag"
 	"os"
 	"path/filepath"
-	"strings"
 	"testing"
+
+	. "github.com/smartystreets/goconvey/convey"
 )
 
 func resetFlags(args ...string) {
@@ -14,77 +15,85 @@ func resetFlags(args ...string) {
 }
 
 func TestRunFileToFile(t *testing.T) {
-	dir := t.TempDir()
-	in := filepath.Join(dir, "d.mmd")
-	if err := os.WriteFile(in, []byte("graph TD\nA --> B"), 0o644); err != nil {
-		t.Fatal(err)
-	}
-	out := filepath.Join(dir, "d.svg")
-	resetFlags("-theme", "dark", "-o", out, in)
+	Convey("Given a diagram file and an output path", t, func() {
+		dir := t.TempDir()
+		in := filepath.Join(dir, "d.mmd")
+		So(os.WriteFile(in, []byte("graph TD\nA --> B"), 0o644), ShouldBeNil)
+		out := filepath.Join(dir, "d.svg")
 
-	if err := run(); err != nil {
-		t.Fatalf("run: %v", err)
-	}
-	got, err := os.ReadFile(out)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if !strings.HasPrefix(string(got), "<svg") {
-		t.Errorf("output not SVG: %.20q", got)
-	}
+		Convey("When running with -o", func() {
+			resetFlags("-theme", "dark", "-o", out, in)
+			err := run()
+
+			Convey("Then it writes SVG to the output file", func() {
+				So(err, ShouldBeNil)
+				got, readErr := os.ReadFile(out)
+				So(readErr, ShouldBeNil)
+				So(string(got), ShouldStartWith, "<svg")
+			})
+		})
+	})
 }
 
 func TestRunStdinToStdout(t *testing.T) {
-	dir := t.TempDir()
-	stdin := filepath.Join(dir, "in")
-	if err := os.WriteFile(stdin, []byte("graph LR\nA --> B"), 0o644); err != nil {
-		t.Fatal(err)
-	}
-	f, err := os.Open(stdin)
-	if err != nil {
-		t.Fatal(err)
-	}
-	defer func() { _ = f.Close() }()
+	Convey("Given source on stdin", t, func() {
+		dir := t.TempDir()
+		stdin := filepath.Join(dir, "in")
+		So(os.WriteFile(stdin, []byte("graph LR\nA --> B"), 0o644), ShouldBeNil)
+		f, err := os.Open(stdin)
+		So(err, ShouldBeNil)
+		defer func() { _ = f.Close() }()
 
-	oldIn, oldOut := os.Stdin, os.Stdout
-	defer func() { os.Stdin, os.Stdout = oldIn, oldOut }()
-	os.Stdin = f
+		oldIn, oldOut := os.Stdin, os.Stdout
+		defer func() { os.Stdin, os.Stdout = oldIn, oldOut }()
+		os.Stdin = f
 
-	outFile := filepath.Join(dir, "captured")
-	w, err := os.Create(outFile)
-	if err != nil {
-		t.Fatal(err)
-	}
-	os.Stdout = w
-	resetFlags("-")
-	runErr := run()
-	_ = w.Close()
-	os.Stdout = oldOut
-	if runErr != nil {
-		t.Fatalf("run: %v", runErr)
-	}
+		outFile := filepath.Join(dir, "captured")
+		w, err := os.Create(outFile)
+		So(err, ShouldBeNil)
+		os.Stdout = w
 
-	got, _ := os.ReadFile(outFile)
-	if !strings.Contains(string(got), "<svg") {
-		t.Errorf("stdout missing SVG: %.20q", got)
-	}
+		Convey("When running with '-'", func() {
+			resetFlags("-")
+			runErr := run()
+			_ = w.Close()
+			os.Stdout = oldOut
+
+			Convey("Then it writes SVG to stdout", func() {
+				So(runErr, ShouldBeNil)
+				got, _ := os.ReadFile(outFile)
+				So(string(got), ShouldContainSubstring, "<svg")
+			})
+		})
+	})
 }
 
 func TestRunBadSource(t *testing.T) {
-	dir := t.TempDir()
-	in := filepath.Join(dir, "bad.mmd")
-	if err := os.WriteFile(in, []byte("graph TD\nA[oops"), 0o644); err != nil {
-		t.Fatal(err)
-	}
-	resetFlags(in)
-	if err := run(); err == nil {
-		t.Error("expected error for bad source, got nil")
-	}
+	Convey("Given a file with invalid diagram syntax", t, func() {
+		dir := t.TempDir()
+		in := filepath.Join(dir, "bad.mmd")
+		So(os.WriteFile(in, []byte("graph TD\nA[oops"), 0o644), ShouldBeNil)
+
+		Convey("When running", func() {
+			resetFlags(in)
+			err := run()
+
+			Convey("Then it returns an error", func() {
+				So(err, ShouldNotBeNil)
+			})
+		})
+	})
 }
 
 func TestRunMissingFile(t *testing.T) {
-	resetFlags(filepath.Join(t.TempDir(), "nope.mmd"))
-	if err := run(); err == nil {
-		t.Error("expected error for missing file, got nil")
-	}
+	Convey("Given a path that does not exist", t, func() {
+		Convey("When running", func() {
+			resetFlags(filepath.Join(t.TempDir(), "nope.mmd"))
+			err := run()
+
+			Convey("Then it returns an error", func() {
+				So(err, ShouldNotBeNil)
+			})
+		})
+	})
 }

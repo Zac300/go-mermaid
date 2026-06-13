@@ -57,30 +57,26 @@ func TestLex(t *testing.T) {
 }
 
 func TestLexTable(t *testing.T) {
-	cases := []struct {
-		name string
-		in   string
-		want []Kind
-	}{
-		{"bare nodes", "graph TD\nA", []Kind{Keyword, Ident, Newline, Ident, EOF}},
-		{"dotted arrow", "graph TD\nA -.-> B", []Kind{Keyword, Ident, Newline, Ident, Arrow, Ident, EOF}},
-		{"comment skipped", "graph TD\n%% note\nA --> B", []Kind{Keyword, Ident, Newline, Newline, Ident, Arrow, Ident, EOF}},
-	}
-	for _, c := range cases {
-		t.Run(c.name, func(t *testing.T) {
-			toks, err := Lex(c.in)
-			if err != nil {
-				t.Fatalf("Lex(%q) error: %v", c.in, err)
-			}
-			got := kinds(toks)
-			if len(got) != len(c.want) {
-				t.Fatalf("Lex(%q) = %v, want %v", c.in, got, c.want)
-			}
-			for i := range got {
-				if got[i] != c.want[i] {
-					t.Fatalf("Lex(%q)[%d] = %v, want %v", c.in, i, got[i], c.want[i])
-				}
-			}
-		})
-	}
+	Convey("Given assorted flowchart snippets", t, func() {
+		cases := []struct {
+			name string
+			in   string
+			want []Kind
+		}{
+			{"bare nodes", "graph TD\nA", []Kind{Keyword, Ident, Newline, Ident, EOF}},
+			{"dotted arrow", "graph TD\nA -.-> B", []Kind{Keyword, Ident, Newline, Ident, Arrow, Ident, EOF}},
+			{"comment skipped", "graph TD\n%% note\nA --> B", []Kind{Keyword, Ident, Newline, Newline, Ident, Arrow, Ident, EOF}},
+		}
+		for _, c := range cases {
+			c := c
+			Convey("When lexing the "+c.name+" case", func() {
+				toks, err := Lex(c.in)
+
+				Convey("Then the token kinds match", func() {
+					So(err, ShouldBeNil)
+					So(kinds(toks), ShouldResemble, c.want)
+				})
+			})
+		}
+	})
 }

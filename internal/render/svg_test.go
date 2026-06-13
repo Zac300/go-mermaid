@@ -1,6 +1,7 @@
 package render
 
 import (
+	"fmt"
 	"math"
 	"strings"
 	"testing"
@@ -47,77 +48,116 @@ func TestSVG(t *testing.T) {
 	})
 
 	Convey("Given each node shape", t, func() {
-		cases := map[string]string{
-			"round":   "graph TD\nA(R)",
-			"stadium": "graph TD\nA([S])",
-			"diamond": "graph TD\nA{D}",
+		cases := []struct{ name, src, want string }{
+			{"round", "graph TD\nA(R)", "<rect"},
+			{"stadium", "graph TD\nA([S])", "<rect"},
+			{"diamond", "graph TD\nA{D}", "<polygon"},
 		}
-		wants := map[string]string{
-			"round":   "<rect",
-			"stadium": "<rect",
-			"diamond": "<polygon",
-		}
-		for name, src := range cases {
-			out, _ := SVG(laidOut(src), opts)
-			So(string(out), ShouldContainSubstring, wants[name])
+		for _, c := range cases {
+			c := c
+			Convey("When rendering the "+c.name+" shape", func() {
+				out, err := SVG(laidOut(c.src), opts)
+
+				Convey("Then the expected SVG primitive appears", func() {
+					So(err, ShouldBeNil)
+					So(string(out), ShouldContainSubstring, c.want)
+				})
+			})
 		}
 	})
 
 	Convey("Given different arrow styles", t, func() {
-		dotted, _ := SVG(laidOut("graph TD\nA -.-> B"), opts)
-		So(string(dotted), ShouldContainSubstring, "stroke-dasharray")
+		Convey("When the arrow is dotted", func() {
+			out, _ := SVG(laidOut("graph TD\nA -.-> B"), opts)
+			Convey("Then the path is dashed", func() {
+				So(string(out), ShouldContainSubstring, "stroke-dasharray")
+			})
+		})
 
-		thick, _ := SVG(laidOut("graph TD\nA ==> B"), opts)
-		So(string(thick), ShouldContainSubstring, `stroke-width="3"`)
+		Convey("When the arrow is thick", func() {
+			out, _ := SVG(laidOut("graph TD\nA ==> B"), opts)
+			Convey("Then the stroke width increases", func() {
+				So(string(out), ShouldContainSubstring, `stroke-width="3"`)
+			})
+		})
 
-		open, _ := SVG(laidOut("graph TD\nA --- B"), opts)
-		So(string(open), ShouldNotContainSubstring, "marker-end")
+		Convey("When the link is open (no head)", func() {
+			out, _ := SVG(laidOut("graph TD\nA --- B"), opts)
+			Convey("Then no arrowhead marker is drawn", func() {
+				So(string(out), ShouldNotContainSubstring, "marker-end")
+			})
+		})
 	})
 
 	Convey("Given an edge label", t, func() {
-		out, _ := SVG(laidOut("graph TD\nA -->|go| B"), opts)
-		So(string(out), ShouldContainSubstring, ">go<")
+		Convey("When rendering", func() {
+			out, _ := SVG(laidOut("graph TD\nA -->|go| B"), opts)
+			Convey("Then the label text appears", func() {
+				So(string(out), ShouldContainSubstring, ">go<")
+			})
+		})
 	})
 
 	Convey("Given the dark theme", t, func() {
-		out, _ := SVG(laidOut("graph TD\nA --> B"), Options{Theme: "dark", FontSize: 14, Padding: 16})
-		So(string(out), ShouldContainSubstring, "#1e1e1e")
+		Convey("When rendering", func() {
+			out, _ := SVG(laidOut("graph TD\nA --> B"), Options{Theme: "dark", FontSize: 14, Padding: 16})
+			Convey("Then the dark background color is used", func() {
+				So(string(out), ShouldContainSubstring, "#1e1e1e")
+			})
+		})
 	})
 
 	Convey("Given an unknown theme", t, func() {
-		out, _ := SVG(laidOut("graph TD\nA --> B"), Options{Theme: "nope", FontSize: 14})
-		So(string(out), ShouldContainSubstring, "#ffffff") // falls back to default
+		Convey("When rendering", func() {
+			out, _ := SVG(laidOut("graph TD\nA --> B"), Options{Theme: "nope", FontSize: 14})
+			Convey("Then it falls back to the default palette", func() {
+				So(string(out), ShouldContainSubstring, "#ffffff")
+			})
+		})
 	})
 
 	Convey("Given a label with XML-special characters", t, func() {
-		res := laidOut("graph TD\nA --> B")
-		res.Graph.Nodes[0].Label = `a<b & "c"`
-		out, _ := SVG(res, opts)
-		So(string(out), ShouldContainSubstring, "a&lt;b &amp; &quot;c&quot;")
+		Convey("When rendering", func() {
+			res := laidOut("graph TD\nA --> B")
+			res.Graph.Nodes[0].Label = `a<b & "c"`
+			out, _ := SVG(res, opts)
+			Convey("Then the characters are escaped", func() {
+				So(string(out), ShouldContainSubstring, "a&lt;b &amp; &quot;c&quot;")
+			})
+		})
 	})
 }
 
 func TestNum(t *testing.T) {
-	cases := []struct {
-		in   float64
-		want string
-	}{
-		{12, "12"},
-		{12.5, "12.5"},
-		{12.25, "12.25"},
-		{0, "0"},
-		{math.Copysign(0, -1), "0"}, // negative zero must normalize to "0"
-		{1.200, "1.2"},
-	}
-	for _, c := range cases {
-		if got := num(c.in); got != c.want {
-			t.Errorf("num(%v) = %q, want %q", c.in, got, c.want)
+	Convey("Given numbers to format for SVG", t, func() {
+		cases := []struct {
+			in   float64
+			want string
+		}{
+			{12, "12"},
+			{12.5, "12.5"},
+			{12.25, "12.25"},
+			{0, "0"},
+			{math.Copysign(0, -1), "0"}, // negative zero must normalize to "0"
+			{1.200, "1.2"},
 		}
-	}
+		for _, c := range cases {
+			c := c
+			Convey(fmt.Sprintf("When formatting %v (want %q)", c.in, c.want), func() {
+				Convey("Then trailing zeros and negative zero are normalized", func() {
+					So(num(c.in), ShouldEqual, c.want)
+				})
+			})
+		}
+	})
 }
 
 func TestEscPlain(t *testing.T) {
-	if got := esc("plain"); strings.Contains(got, "&") {
-		t.Errorf("esc(plain) altered text: %q", got)
-	}
+	Convey("Given text with no special characters", t, func() {
+		Convey("When escaped", func() {
+			Convey("Then it is returned unchanged", func() {
+				So(strings.Contains(esc("plain"), "&"), ShouldBeFalse)
+			})
+		})
+	})
 }

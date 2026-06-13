@@ -50,41 +50,33 @@ func TestRender(t *testing.T) {
 }
 
 func TestGolden(t *testing.T) {
-	dir := filepath.Join("testdata", "golden")
-	inputs, err := filepath.Glob(filepath.Join(dir, "*.mmd"))
-	if err != nil {
-		t.Fatal(err)
-	}
-	if len(inputs) == 0 {
-		t.Skip("no golden inputs")
-	}
+	Convey("Given the golden diagram inputs", t, func() {
+		inputs, err := filepath.Glob(filepath.Join("testdata", "golden", "*.mmd"))
+		So(err, ShouldBeNil)
+		So(len(inputs), ShouldBeGreaterThan, 0)
 
-	for _, in := range inputs {
-		in := in
-		name := strings.TrimSuffix(filepath.Base(in), ".mmd")
-		t.Run(name, func(t *testing.T) {
-			src, err := os.ReadFile(in)
-			if err != nil {
-				t.Fatal(err)
-			}
-			got, err := mermaid.Render(string(src))
-			if err != nil {
-				t.Fatalf("Render(%s): %v", name, err)
-			}
-			goldenPath := strings.TrimSuffix(in, ".mmd") + ".svg"
-			if *update {
-				if err := os.WriteFile(goldenPath, got, 0o644); err != nil {
-					t.Fatal(err)
+		for _, in := range inputs {
+			in := in
+			name := strings.TrimSuffix(filepath.Base(in), ".mmd")
+
+			Convey("When rendering "+name, func() {
+				src, readErr := os.ReadFile(in)
+				So(readErr, ShouldBeNil)
+				got, renderErr := mermaid.Render(string(src))
+				So(renderErr, ShouldBeNil)
+
+				goldenPath := strings.TrimSuffix(in, ".mmd") + ".svg"
+				if *update {
+					So(os.WriteFile(goldenPath, got, 0o644), ShouldBeNil)
+					return
 				}
-				return
-			}
-			want, err := os.ReadFile(goldenPath)
-			if err != nil {
-				t.Fatalf("read golden (run with -update to create): %v", err)
-			}
-			if string(got) != string(want) {
-				t.Errorf("%s: output differs from golden; run: go test -run TestGolden -update", name)
-			}
-		})
-	}
+
+				Convey("Then it matches the committed golden SVG", func() {
+					want, goldErr := os.ReadFile(goldenPath)
+					So(goldErr, ShouldBeNil)
+					So(string(got), ShouldEqual, string(want))
+				})
+			})
+		}
+	})
 }
