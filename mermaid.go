@@ -60,73 +60,57 @@ func Render(src string, opts ...Option) (out []byte, err error) {
 	}
 
 	title, body := parseFrontmatter(src)
+	accTitle, accDescr, body := extractA11y(body)
 
+	var raw []byte
 	switch detectKind(body) {
 	case kindFlowchart:
-		return renderFlowchart(body, cfg, title)
+		raw, err = renderFlowchart(body, cfg, title)
 	case kindSequence:
-		svg, err := sequence.Render(body, sequence.RenderOptions{
-			Theme:    string(cfg.theme),
-			FontFace: cfg.fontFace,
-			FontSize: cfg.fontSize,
-			Padding:  cfg.padding,
-			Title:    title,
+		raw, err = sequence.Render(body, sequence.RenderOptions{
+			Theme: string(cfg.theme), FontFace: cfg.fontFace, FontSize: cfg.fontSize, Padding: cfg.padding, Title: title,
 		})
-		if err != nil {
-			return nil, fmt.Errorf("%w: %w", ErrParse, err)
-		}
-		return svg, nil
+		err = wrapParse(err)
 	case kindPie:
-		svg, err := pie.Render(body, pie.RenderOptions{
-			Theme:    string(cfg.theme),
-			FontFace: cfg.fontFace,
-			FontSize: cfg.fontSize,
-			Padding:  cfg.padding,
-			Title:    title,
+		raw, err = pie.Render(body, pie.RenderOptions{
+			Theme: string(cfg.theme), FontFace: cfg.fontFace, FontSize: cfg.fontSize, Padding: cfg.padding, Title: title,
 		})
-		if err != nil {
-			return nil, fmt.Errorf("%w: %w", ErrParse, err)
-		}
-		return svg, nil
+		err = wrapParse(err)
 	case kindClass:
-		svg, err := class.Render(body, class.RenderOptions{
-			Theme:    string(cfg.theme),
-			FontFace: cfg.fontFace,
-			FontSize: cfg.fontSize,
-			Padding:  cfg.padding,
-			Title:    title,
+		raw, err = class.Render(body, class.RenderOptions{
+			Theme: string(cfg.theme), FontFace: cfg.fontFace, FontSize: cfg.fontSize, Padding: cfg.padding, Title: title,
 		})
-		if err != nil {
-			return nil, fmt.Errorf("%w: %w", ErrParse, err)
-		}
-		return svg, nil
+		err = wrapParse(err)
 	case kindState:
-		svg, err := state.Render(body, state.RenderOptions{
-			Theme:    string(cfg.theme),
-			FontFace: cfg.fontFace,
-			FontSize: cfg.fontSize,
-			Padding:  cfg.padding,
-			Title:    title,
+		raw, err = state.Render(body, state.RenderOptions{
+			Theme: string(cfg.theme), FontFace: cfg.fontFace, FontSize: cfg.fontSize, Padding: cfg.padding, Title: title,
 		})
-		if err != nil {
-			return nil, fmt.Errorf("%w: %w", ErrParse, err)
-		}
-		return svg, nil
+		err = wrapParse(err)
 	case kindER:
-		svg, err := er.Render(body, er.RenderOptions{
-			Theme:    string(cfg.theme),
-			FontFace: cfg.fontFace,
-			FontSize: cfg.fontSize,
-			Padding:  cfg.padding,
-			Title:    title,
+		raw, err = er.Render(body, er.RenderOptions{
+			Theme: string(cfg.theme), FontFace: cfg.fontFace, FontSize: cfg.fontSize, Padding: cfg.padding, Title: title,
 		})
-		if err != nil {
-			return nil, fmt.Errorf("%w: %w", ErrParse, err)
-		}
-		return svg, nil
+		err = wrapParse(err)
 	default:
 		return nil, fmt.Errorf("%w: unrecognized diagram type", ErrUnsupported)
 	}
+	if err != nil {
+		return nil, err
+	}
+
+	a11yTitle := accTitle
+	if a11yTitle == "" {
+		a11yTitle = title
+	}
+	return injectA11y(raw, a11yTitle, accDescr), nil
+}
+
+// wrapParse tags a sub-renderer error as a parse-stage failure.
+func wrapParse(err error) error {
+	if err == nil {
+		return nil
+	}
+	return fmt.Errorf("%w: %w", ErrParse, err)
 }
 
 func renderFlowchart(src string, cfg config, title string) ([]byte, error) {
