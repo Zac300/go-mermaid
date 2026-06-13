@@ -36,6 +36,7 @@ import (
 	"github.com/Zac300/go-mermaid/internal/sequence"
 	"github.com/Zac300/go-mermaid/internal/state"
 	"github.com/Zac300/go-mermaid/internal/syntax"
+	"github.com/Zac300/go-mermaid/internal/timeline"
 )
 
 // ParseError reports a lexing or parsing failure with its source position
@@ -106,6 +107,11 @@ func Render(src string, opts ...Option) (out []byte, err error) {
 		err = wrapParse(err)
 	case kindGit:
 		raw, err = gitgraph.Render(body, gitgraph.RenderOptions{
+			Theme: string(cfg.theme), FontFace: cfg.fontFace, FontSize: cfg.fontSize, Padding: cfg.padding, Title: title,
+		})
+		err = wrapParse(err)
+	case kindTimeline:
+		raw, err = timeline.Render(body, timeline.RenderOptions{
 			Theme: string(cfg.theme), FontFace: cfg.fontFace, FontSize: cfg.fontSize, Padding: cfg.padding, Title: title,
 		})
 		err = wrapParse(err)

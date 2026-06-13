@@ -1,0 +1,27 @@
+<svg role="img" xmlns="http://www.w3.org/2000/svg" width="632" height="195.6" viewBox="0 0 632 195.6" font-family="sans-serif" font-size="14">
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <text x="316" y="30" fill="#333333" text-anchor="middle" font-weight="bold">History of Social Media</text>
+  <line x1="16" y1="103.6" x2="616" y2="103.6" stroke="#333333" stroke-width="2"/>
+  <rect x="16" y="47.6" width="300" height="22" fill="#5B8FF9" fill-opacity="0.3"/>
+  <text x="166" y="63" fill="#333333" text-anchor="middle">Pioneers</text>
+  <rect x="316" y="47.6" width="300" height="22" fill="#61DDAA" fill-opacity="0.3"/>
+  <text x="466" y="63" fill="#333333" text-anchor="middle">Growth</text>
+  <text x="91" y="91.6" fill="#333333" text-anchor="middle" font-weight="bold">2002</text>
+  <circle cx="91" cy="103.6" r="5" fill="#ECECFF" stroke="#9370DB"/>
+  <rect x="24" y="119.6" width="134" height="22" rx="4" fill="#ECECFF" stroke="#9370DB"/>
+  <text x="91" y="135.5" fill="#333333" text-anchor="middle">LinkedIn</text>
+  <text x="241" y="91.6" fill="#333333" text-anchor="middle" font-weight="bold">2004</text>
+  <circle cx="241" cy="103.6" r="5" fill="#ECECFF" stroke="#9370DB"/>
+  <rect x="174" y="119.6" width="134" height="22" rx="4" fill="#ECECFF" stroke="#9370DB"/>
+  <text x="241" y="135.5" fill="#333333" text-anchor="middle">Facebook</text>
+  <rect x="174" y="149.6" width="134" height="22" rx="4" fill="#ECECFF" stroke="#9370DB"/>
+  <text x="241" y="165.5" fill="#333333" text-anchor="middle">Google</text>
+  <text x="391" y="91.6" fill="#333333" text-anchor="middle" font-weight="bold">2005</text>
+  <circle cx="391" cy="103.6" r="5" fill="#ECECFF" stroke="#9370DB"/>
+  <rect x="324" y="119.6" width="134" height="22" rx="4" fill="#ECECFF" stroke="#9370DB"/>
+  <text x="391" y="135.5" fill="#333333" text-anchor="middle">YouTube</text>
+  <text x="541" y="91.6" fill="#333333" text-anchor="middle" font-weight="bold">2006</text>
+  <circle cx="541" cy="103.6" r="5" fill="#ECECFF" stroke="#9370DB"/>
+  <rect x="474" y="119.6" width="134" height="22" rx="4" fill="#ECECFF" stroke="#9370DB"/>
+  <text x="541" y="135.5" fill="#333333" text-anchor="middle">Twitter</text>
+</svg>

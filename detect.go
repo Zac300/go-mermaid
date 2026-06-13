@@ -16,6 +16,7 @@ const (
 	kindJourney
 	kindQuadrant
 	kindGit
+	kindTimeline
 )
 
 // detectKind inspects the first non-empty, non-comment line and maps its
@@ -47,6 +48,8 @@ func detectKind(src string) kind {
 			return kindQuadrant
 		case "gitgraph":
 			return kindGit
+		case "timeline":
+			return kindTimeline
 		default:
 			return kindUnknown
 		}
