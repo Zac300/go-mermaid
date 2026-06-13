@@ -4,8 +4,8 @@
 // Supported diagram types are detected from the source header: flowchart
 // (graph/flowchart), sequenceDiagram, classDiagram, stateDiagram-v2,
 // erDiagram, pie, journey, quadrantChart, gitGraph, timeline, mindmap,
-// gantt, C4 (C4Context/C4Container), requirementDiagram, and sankey-beta.
-// Unsupported types return ErrUnsupported. See DiagramTypes for the list.
+// gantt, C4 (C4Context/C4Container), requirementDiagram, sankey-beta, and
+// xychart-beta. Unsupported types return ErrUnsupported; see DiagramTypes.
 //
 // Basic use:
 //
@@ -46,6 +46,7 @@ import (
 	"github.com/Zac300/go-mermaid/internal/state"
 	"github.com/Zac300/go-mermaid/internal/syntax"
 	"github.com/Zac300/go-mermaid/internal/timeline"
+	"github.com/Zac300/go-mermaid/internal/xychart"
 )
 
 // ParseError reports a lexing or parsing failure with its source position
@@ -146,6 +147,11 @@ func Render(src string, opts ...Option) (out []byte, err error) {
 		err = wrapParse(err)
 	case kindSankey:
 		raw, err = sankey.Render(body, sankey.RenderOptions{
+			Theme: string(cfg.theme), FontFace: cfg.fontFace, FontSize: cfg.fontSize, Padding: cfg.padding, Title: title,
+		})
+		err = wrapParse(err)
+	case kindXYChart:
+		raw, err = xychart.Render(body, xychart.RenderOptions{
 			Theme: string(cfg.theme), FontFace: cfg.fontFace, FontSize: cfg.fontSize, Padding: cfg.padding, Title: title,
 		})
 		err = wrapParse(err)

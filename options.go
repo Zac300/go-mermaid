@@ -43,6 +43,7 @@ func DiagramTypes() []string {
 		"C4Context / C4Container",
 		"requirementDiagram",
 		"sankey-beta",
+		"xychart-beta",
 	}
 }
 
