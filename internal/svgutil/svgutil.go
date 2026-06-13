@@ -29,3 +29,12 @@ var escaper = strings.NewReplacer(
 
 // Esc escapes text for safe inclusion in SVG/XML content and attributes.
 func Esc(s string) string { return escaper.Replace(s) }
+
+// TitleHeight is the vertical space reserved for a diagram title, or 0 when
+// there is no title.
+func TitleHeight(title string, fontSize float64) float64 {
+	if title == "" {
+		return 0
+	}
+	return fontSize*1.4 + 12
+}

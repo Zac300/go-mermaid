@@ -47,15 +47,18 @@ func Render(src string, opts ...Option) ([]byte, error) {
 		opt(&cfg)
 	}
 
-	switch detectKind(src) {
+	title, body := parseFrontmatter(src)
+
+	switch detectKind(body) {
 	case kindFlowchart:
-		return renderFlowchart(src, cfg)
+		return renderFlowchart(body, cfg, title)
 	case kindSequence:
-		svg, err := sequence.Render(src, sequence.RenderOptions{
+		svg, err := sequence.Render(body, sequence.RenderOptions{
 			Theme:    string(cfg.theme),
 			FontFace: cfg.fontFace,
 			FontSize: cfg.fontSize,
 			Padding:  cfg.padding,
+			Title:    title,
 		})
 		if err != nil {
 			return nil, fmt.Errorf("%w: %w", ErrParse, err)
@@ -66,7 +69,7 @@ func Render(src string, opts ...Option) ([]byte, error) {
 	}
 }
 
-func renderFlowchart(src string, cfg config) ([]byte, error) {
+func renderFlowchart(src string, cfg config, title string) ([]byte, error) {
 	tokens, err := lexer.Lex(src)
 	if err != nil {
 		return nil, fmt.Errorf("%w: %w", ErrParse, err)
@@ -82,7 +85,9 @@ func renderFlowchart(src string, cfg config) ([]byte, error) {
 		return nil, fmt.Errorf("%w: %w", ErrLayout, err)
 	}
 
-	svg, err := render.SVG(laid, cfg.render())
+	ro := cfg.render()
+	ro.Title = title
+	svg, err := render.SVG(laid, ro)
 	if err != nil {
 		return nil, fmt.Errorf("%w: %w", ErrRender, err)
 	}

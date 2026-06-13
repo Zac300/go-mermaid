@@ -8,6 +8,7 @@ import (
 
 	"github.com/Zac300/go-mermaid/internal/domain"
 	"github.com/Zac300/go-mermaid/internal/layout"
+	"github.com/Zac300/go-mermaid/internal/svgutil"
 	"github.com/Zac300/go-mermaid/internal/theme"
 )
 
@@ -17,14 +18,31 @@ type Options struct {
 	FontFace string
 	FontSize float64
 	Padding  float64
+	Title    string
+}
+
+// writeTitle draws a centered, bold diagram title at (x, y) if non-empty.
+func writeTitle(b *strings.Builder, title string, x, y float64, pal theme.Palette) {
+	if title == "" {
+		return
+	}
+	fmt.Fprintf(b, `  <text x="%s" y="%s" fill="%s" text-anchor="middle" font-weight="bold">%s</text>`,
+		num(x), num(y), pal.Text, esc(title))
+	b.WriteByte('\n')
 }
 
 // SVG renders a laid-out graph to an SVG document.
 func SVG(res *layout.Result, opts Options) ([]byte, error) {
 	pal := theme.For(opts.Theme)
 	pad := opts.Padding
-	w := res.Width + pad*2
-	h := res.Height + pad*2
+	titleH := svgutil.TitleHeight(opts.Title, opts.FontSize)
+
+	contentW := res.Width
+	if tw := opts.FontSize * 0.6 * float64(len([]rune(opts.Title))); tw > contentW {
+		contentW = tw
+	}
+	w := contentW + pad*2
+	h := res.Height + titleH + pad*2
 
 	var b strings.Builder
 	fmt.Fprintf(&b, `<svg xmlns="http://www.w3.org/2000/svg" width="%s" height="%s" viewBox="0 0 %s %s" font-family="%s" font-size="%s">`,
@@ -38,7 +56,9 @@ func SVG(res *layout.Result, opts Options) ([]byte, error) {
 	fmt.Fprintf(&b, `  <rect width="100%%" height="100%%" fill="%s"/>`, pal.Background)
 	b.WriteByte('\n')
 
-	fmt.Fprintf(&b, `  <g transform="translate(%s,%s)">`, num(pad), num(pad))
+	writeTitle(&b, opts.Title, w/2, pad+opts.FontSize, pal)
+
+	fmt.Fprintf(&b, `  <g transform="translate(%s,%s)">`, num(pad), num(pad+titleH))
 	b.WriteByte('\n')
 
 	for _, e := range res.Graph.Edges {

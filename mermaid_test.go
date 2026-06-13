@@ -56,6 +56,16 @@ func TestRender(t *testing.T) {
 			})
 		})
 
+		Convey("When the source has a front-matter title", func() {
+			out, err := mermaid.Render("---\ntitle: Pipeline\n---\ngraph LR\nA-->B")
+
+			Convey("Then the title is rendered in bold", func() {
+				So(err, ShouldBeNil)
+				So(string(out), ShouldContainSubstring, ">Pipeline<")
+				So(string(out), ShouldContainSubstring, `font-weight="bold"`)
+			})
+		})
+
 		Convey("When the diagram type is unsupported", func() {
 			_, err := mermaid.Render("classDiagram\n  Animal <|-- Dog")
 

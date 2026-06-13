@@ -14,6 +14,7 @@ type RenderOptions struct {
 	FontFace string
 	FontSize float64
 	Padding  float64
+	Title    string
 }
 
 // Render parses, lays out, and renders sequence diagram source to SVG.
@@ -29,8 +30,13 @@ func Render(src string, o RenderOptions) ([]byte, error) {
 func svg(lay *Layout, o RenderOptions) []byte {
 	pal := theme.For(o.Theme)
 	pad := o.Padding
-	w := lay.Width + pad*2
-	h := lay.Height + pad*2
+	titleH := svgutil.TitleHeight(o.Title, o.FontSize)
+	contentW := lay.Width
+	if tw := o.FontSize * 0.6 * float64(len([]rune(o.Title))); tw > contentW {
+		contentW = tw
+	}
+	w := contentW + pad*2
+	h := lay.Height + titleH + pad*2
 
 	var b strings.Builder
 	fmt.Fprintf(&b, `<svg xmlns="http://www.w3.org/2000/svg" width="%s" height="%s" viewBox="0 0 %s %s" font-family="%s" font-size="%s">`,
@@ -41,7 +47,12 @@ func svg(lay *Layout, o RenderOptions) []byte {
 	b.WriteByte('\n')
 	fmt.Fprintf(&b, `  <rect width="100%%" height="100%%" fill="%s"/>`, pal.Background)
 	b.WriteByte('\n')
-	fmt.Fprintf(&b, `  <g transform="translate(%s,%s)">`, svgutil.Num(pad), svgutil.Num(pad))
+	if o.Title != "" {
+		fmt.Fprintf(&b, `  <text x="%s" y="%s" fill="%s" text-anchor="middle" font-weight="bold">%s</text>`,
+			svgutil.Num(w/2), svgutil.Num(pad+o.FontSize), pal.Text, svgutil.Esc(o.Title))
+		b.WriteByte('\n')
+	}
+	fmt.Fprintf(&b, `  <g transform="translate(%s,%s)">`, svgutil.Num(pad), svgutil.Num(pad+titleH))
 	b.WriteByte('\n')
 
 	for _, p := range lay.Diagram.Participants {
