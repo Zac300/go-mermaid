@@ -73,6 +73,10 @@ svg, err := mermaid.Render(src,
 ```bash
 mermaid diagram.mmd > diagram.svg
 echo "graph LR; A-->B-->C" | mermaid -theme dark -o out.svg
+mermaid a.mmd b.mmd c.mmd      # batch: writes a.svg, b.svg, c.svg
+mermaid -list-types            # list supported diagram types
+mermaid -list-themes           # list themes
+mermaid serve -addr :8080      # HTTP render endpoint (POST source, or GET ?src=)
 ```
 
 ## Error handling
@@ -96,18 +100,24 @@ Sentinels: `ErrParse`, `ErrLayout`, `ErrRender`, `ErrUnsupported`.
 
 The renderer dispatches on the diagram header. Status vs. Mermaid:
 
-| Type | Status |
-| --- | --- |
-| Flowchart (`graph` / `flowchart`) | ✅ supported |
-| Sequence (`sequenceDiagram`) | ✅ supported (notes, activations) |
-| Class (`classDiagram`) | ✅ supported |
-| State (`stateDiagram-v2`) | ✅ supported |
-| Entity-relationship (`erDiagram`) | ✅ supported |
-| Pie (`pie`) | ✅ supported |
-| Gantt / Git / C4 / others | ⏳ planned |
+| Type | Header | Notes |
+| --- | --- | --- |
+| Flowchart | `graph` / `flowchart` | 12 shapes, subgraphs, styling, orthogonal edges |
+| Sequence | `sequenceDiagram` | notes, activations, loop/alt/opt frames, autonumber |
+| Class | `classDiagram` | members, 6 relationship types |
+| State | `stateDiagram-v2` | start/end, composite states |
+| Entity-relationship | `erDiagram` | attributes, crow's-foot cardinality |
+| Pie | `pie` | legend with percentages |
+| User journey | `journey` | scored tasks, section bands |
+| Quadrant | `quadrantChart` | axes, 4 quadrants, points |
+| Git graph | `gitGraph` | branches, merges, tags |
+| Timeline | `timeline` | sections, periods, events |
+| Mindmap | `mindmap` | indentation hierarchy |
+| Gantt | `gantt` | dates, durations, `after` deps |
 
 Unsupported types return `ErrUnsupported`. A `---`/`title:` front-matter block
-is honored for all types.
+and `accTitle:`/`accDescr:` (SVG `<title>`/`<desc>`) are honored for all types.
+Themes: `default`, `dark`, `neutral`, `forest`, `base`.
 
 Rendering is fast — roughly 10–50µs per diagram with no external processes.
 
@@ -148,14 +158,14 @@ Notes, loops, alt/opt and activations are parsed but not yet drawn (skipped).
 - [x] Barycenter x-positioning (parents centered over children)
 - [x] Multi-rank edge bends and self-loops
 - [x] Sequence diagrams
-- [x] Orthogonal edge routing
-- [x] Sequence notes and activations
-- [x] Class, state, ER, and pie diagrams
-- [x] Front-matter titles
+- [x] Orthogonal edge routing, subgraphs, styling, 12 node shapes
+- [x] Sequence notes, activations, loop/alt/opt frames, autonumber
+- [x] 12 diagram types (see table above)
+- [x] Front-matter titles, accessibility (title/desc), 5 themes
+- [x] CLI batch render, `serve` HTTP mode, fuzz-tested parsers
 - [ ] Network-simplex ranking (tighter flowchart layouts)
 - [ ] Spline edge routing
-- [ ] Flowchart subgraphs; sequence loops / alt
-- [ ] Gantt, git, C4 diagrams
+- [ ] C4, requirement, sankey diagrams
 - [ ] PNG output
 
 ## Architecture

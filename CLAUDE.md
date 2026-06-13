@@ -30,8 +30,11 @@ source → lexer → parser → domain.Graph → layout → render → SVG
 | `.` (root)          | Public API: `Render`, diagram-type dispatch, options, errors. |
 | `cmd/mermaid`       | CLI wrapper over the library.                              |
 
-New diagram types follow the `internal/sequence` shape: a self-contained
-package (parse → layout → render) wired into the root `detectKind` dispatch.
+Diagram-type packages (each self-contained: parse → layout/place → render,
+wired into the root `detectKind` dispatch): `internal/sequence`, `class`,
+`state`, `er`, `pie`, `journey`, `quadrant`, `git`, `timeline`, `mindmap`,
+`gantt`. Flowchart is the exception, split across `lexer`/`parser`/`layout`/
+`render`. New types should follow the self-contained package shape.
 
 Keep stages decoupled. A rendering change must not require touching the parser,
 and vice versa. New dependencies between `internal/*` packages should follow the
