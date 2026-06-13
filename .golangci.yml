@@ -14,6 +14,13 @@ linters:
     - revive
     - gocritic
     - unconvert
+  exclusions:
+    rules:
+      # goconvey is conventionally dot-imported in tests.
+      - path: _test\.go
+        linters:
+          - revive
+        text: dot-imports
 
 formatters:
   enable:

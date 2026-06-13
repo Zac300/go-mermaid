@@ -5,7 +5,7 @@ import "github.com/Zac300/go-mermaid/internal/domain"
 // position assigns pixel coordinates to each node from its rank and order,
 // then returns the overall diagram bounds. The cross axis is centered per
 // layer. Direction controls which screen axis the ranks grow along.
-func position(g *domain.Graph, ranks map[string]int, layers [][]string, opts Options) (width, height float64) {
+func position(g *domain.Graph, layers [][]string, opts Options) (width, height float64) {
 	horizontal := g.Direction == domain.LeftRight || g.Direction == domain.RightLeft
 
 	// Extent of each layer along the rank axis (max node thickness) and

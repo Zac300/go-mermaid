@@ -91,9 +91,9 @@ func (l *lexer) lexArrow() Token {
 func (l *lexer) lexShape() ([]Token, error) {
 	col := l.col
 	open := l.readOpener()
-	close := shapeCloser(open)
+	closer := shapeCloser(open)
 	start := l.pos
-	for l.pos < len(l.src) && !l.hasPrefix(close) {
+	for l.pos < len(l.src) && !l.hasPrefix(closer) {
 		if l.src[l.pos] == '\n' {
 			return nil, syntax.Errorf(l.line, col, "unterminated shape %q", open)
 		}
@@ -104,13 +104,13 @@ func (l *lexer) lexShape() ([]Token, error) {
 	}
 	text := strings.TrimSpace(string(l.src[start:l.pos]))
 	textCol := col + len([]rune(open))
-	for range close {
+	for range closer {
 		l.advance()
 	}
 	return []Token{
 		{Kind: ShapeOpen, Val: open, Line: l.line, Col: col},
 		{Kind: Text, Val: stripQuotes(text), Line: l.line, Col: textCol},
-		{Kind: ShapeClose, Val: close, Line: l.line, Col: l.col},
+		{Kind: ShapeClose, Val: closer, Line: l.line, Col: l.col},
 	}, nil
 }
 

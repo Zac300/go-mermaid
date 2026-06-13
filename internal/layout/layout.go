@@ -32,7 +32,7 @@ func Compute(g *domain.Graph, opts Options) (*Result, error) {
 	ranks := assignRanks(g)
 	layers := orderLayers(g, ranks)
 
-	w, h := position(g, ranks, layers, opts)
+	w, h := position(g, layers, opts)
 	routeEdges(g)
 	restoreReversed(g, reversed)
 
