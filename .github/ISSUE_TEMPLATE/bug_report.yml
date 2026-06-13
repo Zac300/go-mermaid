@@ -1,0 +1,32 @@
+name: Bug report
+description: Report incorrect output or a crash
+labels: [bug]
+body:
+  - type: textarea
+    id: source
+    attributes:
+      label: Diagram source
+      description: The Mermaid source that triggers the issue
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: What happened instead?
+      description: Include the SVG output or error message
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: go-mermaid version or commit, and `go version`
+    validations:
+      required: true

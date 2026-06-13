@@ -1,0 +1,17 @@
+name: Feature request
+description: Suggest new syntax support or functionality
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: For new Mermaid syntax, link the relevant Mermaid docs and give an example
+    validations:
+      required: true
