@@ -10,6 +10,7 @@ const (
 	kindFlowchart
 	kindSequence
 	kindPie
+	kindClass
 )
 
 // detectKind inspects the first non-empty, non-comment line and maps its
@@ -29,6 +30,8 @@ func detectKind(src string) kind {
 			return kindSequence
 		case "pie":
 			return kindPie
+		case "classdiagram":
+			return kindClass
 		default:
 			return kindUnknown
 		}

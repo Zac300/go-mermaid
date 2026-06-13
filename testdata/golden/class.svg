@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="282.8" height="220" viewBox="0 0 282.8 220" font-family="sans-serif" font-size="14">
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <g transform="translate(16,16)">
+    <path d="M135.6,84 L135.6,104 L60.4,104 L60.4,144" fill="none" stroke="#333333"/>
+    <path d="M135.6,84 L129.6,96 L141.6,96 Z" fill="#ffffff" stroke="#333333"/>
+    <path d="M135.6,84 L135.6,104 L210.8,104 L210.8,154" fill="none" stroke="#333333"/>
+    <path d="M135.6,84 L129.6,90 L135.6,96 L141.6,90 Z" fill="#333333" stroke="#333333"/>
+    <rect x="58.4" y="0" width="154.4" height="84" fill="#ECECFF" stroke="#9370DB"/>
+    <text x="135.6" y="14" fill="#333333" text-anchor="middle" font-weight="bold">Animal</text>
+    <line x1="58.4" y1="24" x2="212.8" y2="24" stroke="#9370DB"/>
+    <text x="68.4" y="41" fill="#333333">+int age</text>
+    <text x="68.4" y="61" fill="#333333">+String name</text>
+    <line x1="58.4" y1="64" x2="212.8" y2="64" stroke="#9370DB"/>
+    <text x="68.4" y="81" fill="#333333">+isMammal() bool</text>
+    <rect x="0" y="144" width="120.8" height="44" fill="#ECECFF" stroke="#9370DB"/>
+    <text x="60.4" y="158" fill="#333333" text-anchor="middle" font-weight="bold">Dog</text>
+    <line x1="0" y1="168" x2="120.8" y2="168" stroke="#9370DB"/>
+    <text x="10" y="185" fill="#333333">+bark() void</text>
+    <rect x="170.8" y="154" width="80" height="24" fill="#ECECFF" stroke="#9370DB"/>
+    <text x="210.8" y="168" fill="#333333" text-anchor="middle" font-weight="bold">Leg</text>
+  </g>
+</svg>

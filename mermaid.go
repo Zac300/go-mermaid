@@ -23,6 +23,7 @@ package mermaid
 import (
 	"fmt"
 
+	"github.com/Zac300/go-mermaid/internal/class"
 	"github.com/Zac300/go-mermaid/internal/layout"
 	"github.com/Zac300/go-mermaid/internal/lexer"
 	"github.com/Zac300/go-mermaid/internal/parser"
@@ -67,6 +68,18 @@ func Render(src string, opts ...Option) ([]byte, error) {
 		return svg, nil
 	case kindPie:
 		svg, err := pie.Render(body, pie.RenderOptions{
+			Theme:    string(cfg.theme),
+			FontFace: cfg.fontFace,
+			FontSize: cfg.fontSize,
+			Padding:  cfg.padding,
+			Title:    title,
+		})
+		if err != nil {
+			return nil, fmt.Errorf("%w: %w", ErrParse, err)
+		}
+		return svg, nil
+	case kindClass:
+		svg, err := class.Render(body, class.RenderOptions{
 			Theme:    string(cfg.theme),
 			FontFace: cfg.fontFace,
 			FontSize: cfg.fontSize,

@@ -49,10 +49,15 @@ func Compute(g *domain.Graph, opts Options) (*Result, error) {
 }
 
 // sizeNodes estimates a box size for each node from its label and font size.
+// Nodes that already have a non-zero size (e.g. class boxes sized by their
+// own renderer) are left untouched.
 func sizeNodes(g *domain.Graph, opts Options) {
 	const padX, padY = 20.0, 14.0
 	charW := opts.FontSize * 0.6
 	for _, n := range g.Nodes {
+		if n.Size.W != 0 || n.Size.H != 0 {
+			continue
+		}
 		label := n.Label
 		if label == "" {
 			label = n.ID
