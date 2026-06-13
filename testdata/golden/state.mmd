@@ -1,0 +1,6 @@
+stateDiagram-v2
+[*] --> Still
+Still --> Moving : start
+Moving --> Still : stop
+Moving --> Crash
+Crash --> [*]

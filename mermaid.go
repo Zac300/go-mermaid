@@ -30,6 +30,7 @@ import (
 	"github.com/Zac300/go-mermaid/internal/pie"
 	"github.com/Zac300/go-mermaid/internal/render"
 	"github.com/Zac300/go-mermaid/internal/sequence"
+	"github.com/Zac300/go-mermaid/internal/state"
 	"github.com/Zac300/go-mermaid/internal/syntax"
 )
 
@@ -80,6 +81,18 @@ func Render(src string, opts ...Option) ([]byte, error) {
 		return svg, nil
 	case kindClass:
 		svg, err := class.Render(body, class.RenderOptions{
+			Theme:    string(cfg.theme),
+			FontFace: cfg.fontFace,
+			FontSize: cfg.fontSize,
+			Padding:  cfg.padding,
+			Title:    title,
+		})
+		if err != nil {
+			return nil, fmt.Errorf("%w: %w", ErrParse, err)
+		}
+		return svg, nil
+	case kindState:
+		svg, err := state.Render(body, state.RenderOptions{
 			Theme:    string(cfg.theme),
 			FontFace: cfg.fontFace,
 			FontSize: cfg.fontSize,
