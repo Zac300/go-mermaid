@@ -6,12 +6,12 @@
     <path d="M214,21 L264,21" fill="none" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
     <path d="M354.4,21 L404.4,21" fill="none" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
     <rect x="0" y="0" width="82" height="42" rx="6" fill="#ECECFF" stroke="#9370DB"/>
-    <text x="41" y="25.9" fill="#333333" text-anchor="middle">Input</text>
+    <text fill="#333333" text-anchor="middle"><tspan x="41" y="25.9">Input</tspan></text>
     <rect x="132" y="0" width="82" height="42" rx="6" fill="#ECECFF" stroke="#9370DB"/>
-    <text x="173" y="25.9" fill="#333333" text-anchor="middle">Parse</text>
+    <text fill="#333333" text-anchor="middle"><tspan x="173" y="25.9">Parse</tspan></text>
     <rect x="264" y="0" width="90.4" height="42" rx="6" fill="#ECECFF" stroke="#9370DB"/>
-    <text x="309.2" y="25.9" fill="#333333" text-anchor="middle">Layout</text>
+    <text fill="#333333" text-anchor="middle"><tspan x="309.2" y="25.9">Layout</tspan></text>
     <rect x="404.4" y="0" width="90.4" height="42" rx="6" fill="#ECECFF" stroke="#9370DB"/>
-    <text x="449.6" y="25.9" fill="#333333" text-anchor="middle">Render</text>
+    <text fill="#333333" text-anchor="middle"><tspan x="449.6" y="25.9">Render</tspan></text>
   </g>
 </svg>

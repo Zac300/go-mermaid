@@ -10,6 +10,7 @@ import (
 	"math"
 
 	"github.com/Zac300/go-mermaid/internal/domain"
+	"github.com/Zac300/go-mermaid/internal/svgutil"
 )
 
 // Options tunes spacing and text metrics used during layout.
@@ -62,8 +63,15 @@ func sizeNodes(g *domain.Graph, opts Options) {
 		if label == "" {
 			label = n.ID
 		}
-		w := float64(len([]rune(label)))*charW + padX*2
-		h := opts.FontSize + padY*2
+		lines := svgutil.SplitLines(label)
+		maxLine := 0
+		for _, ln := range lines {
+			if l := len([]rune(ln)); l > maxLine {
+				maxLine = l
+			}
+		}
+		w := float64(maxLine)*charW + padX*2
+		h := opts.FontSize*float64(len(lines)) + padY*2
 		switch n.Shape {
 		case domain.ShapeCircle:
 			if w < h {

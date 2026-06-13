@@ -8,16 +8,16 @@
     <path d="M95.6,318 L95.6,368" fill="none" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
     <path d="M95.6,410 L95.6,460" fill="none" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
     <rect x="33.6" y="0" width="124" height="42" fill="#ECECFF" stroke="#9370DB"/><line x1="39.6" y1="0" x2="39.6" y2="42" stroke="#9370DB"/><line x1="151.6" y1="0" x2="151.6" y2="42" stroke="#9370DB"/>
-    <text x="95.6" y="25.9" fill="#333333" text-anchor="middle">Subroutine</text>
+    <text fill="#333333" text-anchor="middle"><tspan x="95.6" y="25.9">Subroutine</tspan></text>
     <path d="M42,97.04 L42,128.96 A53.6,5.04 0 0 0 149.2,128.96 A53.6,5.04 0 0 0 42,97.04 Z" fill="#ECECFF" stroke="#9370DB"/><path d="M42,97.04 A53.6,5.04 0 0 0 149.2,97.04" fill="none" stroke="#9370DB"/>
-    <text x="95.6" y="117.9" fill="#333333" text-anchor="middle">Database</text>
+    <text fill="#333333" text-anchor="middle"><tspan x="95.6" y="117.9">Database</tspan></text>
     <polygon points="25.2,205 46.2,184 145,184 166,205 145,226 46.2,226" fill="#ECECFF" stroke="#9370DB"/>
-    <text x="95.6" y="209.9" fill="#333333" text-anchor="middle">Hexagon</text>
+    <text fill="#333333" text-anchor="middle"><tspan x="95.6" y="209.9">Hexagon</tspan></text>
     <polygon points="21,276 191.2,276 170.2,318 0,318" fill="#ECECFF" stroke="#9370DB"/>
-    <text x="95.6" y="301.9" fill="#333333" text-anchor="middle">Parallelogram</text>
+    <text fill="#333333" text-anchor="middle"><tspan x="95.6" y="301.9">Parallelogram</tspan></text>
     <polygon points="37.8,368 153.4,368 174.4,410 16.8,410" fill="#ECECFF" stroke="#9370DB"/>
-    <text x="95.6" y="393.9" fill="#333333" text-anchor="middle">Trapezoid</text>
+    <text fill="#333333" text-anchor="middle"><tspan x="95.6" y="393.9">Trapezoid</tspan></text>
     <rect x="46.2" y="460" width="98.8" height="42" rx="21" fill="#ECECFF" stroke="#9370DB"/>
-    <text x="95.6" y="485.9" fill="#333333" text-anchor="middle">Stadium</text>
+    <text fill="#333333" text-anchor="middle"><tspan x="95.6" y="485.9">Stadium</tspan></text>
   </g>
 </svg>

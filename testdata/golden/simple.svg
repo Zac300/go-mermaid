@@ -9,12 +9,12 @@
     <text x="132.65" y="159" fill="#333333" text-anchor="middle" dy="-2">no</text>
     <path d="M152.75,42 L152.75,67 L204.8,67 L204.8,113 L204.8,169 L164.6,169 L164.6,184" fill="none" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
     <rect x="111.75" y="0" width="82" height="42" fill="#ECECFF" stroke="#9370DB"/>
-    <text x="152.75" y="25.9" fill="#333333" text-anchor="middle">Start</text>
+    <text fill="#333333" text-anchor="middle"><tspan x="152.75" y="25.9">Start</tspan></text>
     <polygon points="100.7,92 154.3,113 100.7,134 47.1,113" fill="#ECECFF" stroke="#9370DB"/>
-    <text x="100.7" y="117.9" fill="#333333" text-anchor="middle">Decision</text>
+    <text fill="#333333" text-anchor="middle"><tspan x="100.7" y="117.9">Decision</tspan></text>
     <rect x="0" y="204" width="73.6" height="42" rx="21" fill="#ECECFF" stroke="#9370DB"/>
-    <text x="36.8" y="229.9" fill="#333333" text-anchor="middle">Done</text>
+    <text fill="#333333" text-anchor="middle"><tspan x="36.8" y="229.9">Done</tspan></text>
     <circle cx="164.6" cy="225" r="41" fill="#ECECFF" stroke="#9370DB"/>
-    <text x="164.6" y="229.9" fill="#333333" text-anchor="middle">Retry</text>
+    <text fill="#333333" text-anchor="middle"><tspan x="164.6" y="229.9">Retry</tspan></text>
   </g>
 </svg>

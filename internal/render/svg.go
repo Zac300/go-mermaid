@@ -180,8 +180,7 @@ func writeNode(b *strings.Builder, n *domain.Node, pal theme.Palette, opts Optio
 	if label == "" {
 		label = n.ID
 	}
-	baseline := y + h/2 + opts.FontSize*0.35
-	fmt.Fprintf(b, `    <text x="%s" y="%s" fill="%s" text-anchor="middle">%s</text>`,
-		num(x+w/2), num(baseline), pal.Text, esc(label))
+	b.WriteString("    ")
+	svgutil.MultilineText(b, svgutil.SplitLines(label), x+w/2, y+h/2+opts.FontSize*0.35, opts.FontSize+2, pal.Text, "")
 	b.WriteByte('\n')
 }
