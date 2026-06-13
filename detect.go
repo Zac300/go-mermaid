@@ -12,6 +12,7 @@ const (
 	kindPie
 	kindClass
 	kindState
+	kindER
 )
 
 // detectKind inspects the first non-empty, non-comment line and maps its
@@ -35,6 +36,8 @@ func detectKind(src string) kind {
 			return kindClass
 		case "statediagram", "statediagram-v2":
 			return kindState
+		case "erdiagram":
+			return kindER
 		default:
 			return kindUnknown
 		}

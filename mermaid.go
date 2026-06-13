@@ -24,6 +24,7 @@ import (
 	"fmt"
 
 	"github.com/Zac300/go-mermaid/internal/class"
+	"github.com/Zac300/go-mermaid/internal/er"
 	"github.com/Zac300/go-mermaid/internal/layout"
 	"github.com/Zac300/go-mermaid/internal/lexer"
 	"github.com/Zac300/go-mermaid/internal/parser"
@@ -93,6 +94,18 @@ func Render(src string, opts ...Option) ([]byte, error) {
 		return svg, nil
 	case kindState:
 		svg, err := state.Render(body, state.RenderOptions{
+			Theme:    string(cfg.theme),
+			FontFace: cfg.fontFace,
+			FontSize: cfg.fontSize,
+			Padding:  cfg.padding,
+			Title:    title,
+		})
+		if err != nil {
+			return nil, fmt.Errorf("%w: %w", ErrParse, err)
+		}
+		return svg, nil
+	case kindER:
+		svg, err := er.Render(body, er.RenderOptions{
 			Theme:    string(cfg.theme),
 			FontFace: cfg.fontFace,
 			FontSize: cfg.fontSize,
