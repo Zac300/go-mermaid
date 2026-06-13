@@ -91,19 +91,26 @@ func (l *lexer) lexArrow() Token {
 	return Token{Kind: Arrow, Val: string(l.src[start:l.pos]), Line: l.line, Col: col}
 }
 
-// lexShape captures a node shape: opener, inner text, closer.
+// lexShape captures a node shape: opener, inner text, closer. Some openers
+// admit more than one closer (e.g. "[/" closes with "/]" for a parallelogram
+// or "\]" for a trapezoid); the first matching closer wins.
 func (l *lexer) lexShape() ([]Token, error) {
 	col := l.col
 	open := l.readOpener()
-	closer := shapeCloser(open)
+	candidates := shapeClosers[open]
 	start := l.pos
-	for l.pos < len(l.src) && !l.hasPrefix(closer) {
+	var closer string
+	for l.pos < len(l.src) {
 		if l.src[l.pos] == '\n' {
 			return nil, syntax.Errorf(l.line, col, "unterminated shape %q", open)
 		}
+		if m := l.matchCloser(candidates); m != "" {
+			closer = m
+			break
+		}
 		l.advance()
 	}
-	if l.pos >= len(l.src) {
+	if closer == "" {
 		return nil, syntax.Errorf(l.line, col, "unterminated shape %q", open)
 	}
 	text := strings.TrimSpace(string(l.src[start:l.pos]))
@@ -116,6 +123,16 @@ func (l *lexer) lexShape() ([]Token, error) {
 		{Kind: Text, Val: stripQuotes(text), Line: l.line, Col: textCol},
 		{Kind: ShapeClose, Val: closer, Line: l.line, Col: l.col},
 	}, nil
+}
+
+// matchCloser returns the candidate closer present at the current position.
+func (l *lexer) matchCloser(candidates []string) string {
+	for _, c := range candidates {
+		if l.hasPrefix(c) {
+			return c
+		}
+	}
+	return ""
 }
 
 // lexPipeLabel captures |text| used for inline edge labels.
@@ -141,9 +158,27 @@ func (l *lexer) lexPipeLabel() ([]Token, error) {
 	}, nil
 }
 
+// shapeOpeners lists opening delimiters, longest first so the longest match
+// at a position wins (e.g. "[[" before "[").
+var shapeOpeners = []string{"[[", "[(", "[/", "[\\", "([", "((", "{{", "[", "(", "{"}
+
+// shapeClosers maps each opener to its candidate closing delimiters.
+var shapeClosers = map[string][]string{
+	"[[":  {"]]"},
+	"[(":  {")]"},
+	"[/":  {"/]", "\\]"}, // parallelogram or trapezoid
+	"[\\": {"\\]", "/]"}, // parallelogram-alt or trapezoid-alt
+	"([":  {"])"},
+	"((":  {"))"},
+	"{{":  {"}}"},
+	"[":   {"]"},
+	"(":   {")"},
+	"{":   {"}"},
+}
+
 // readOpener consumes the longest valid opening delimiter at pos.
 func (l *lexer) readOpener() string {
-	for _, o := range []string{"([", "((", "[", "(", "{"} {
+	for _, o := range shapeOpeners {
 		if l.hasPrefix(o) {
 			for range o {
 				l.advance()
@@ -194,22 +229,6 @@ func (l *lexer) advance() {
 
 func (l *lexer) emit(k Kind, v string) Token {
 	return Token{Kind: k, Val: v, Line: l.line, Col: l.col}
-}
-
-func shapeCloser(open string) string {
-	switch open {
-	case "([":
-		return "])"
-	case "((":
-		return "))"
-	case "[":
-		return "]"
-	case "(":
-		return ")"
-	case "{":
-		return "}"
-	}
-	return ""
 }
 
 func isShapeOpen(r rune) bool { return r == '[' || r == '(' || r == '{' }

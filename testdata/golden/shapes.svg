@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="223.2" height="534" viewBox="0 0 223.2 534" font-family="sans-serif" font-size="14">
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#333333"/></marker></defs>
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <g transform="translate(16,16)">
+    <path d="M95.6,42 L95.6,92" fill="none" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <path d="M95.6,134 L95.6,184" fill="none" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <path d="M95.6,226 L95.6,276" fill="none" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <path d="M95.6,318 L95.6,368" fill="none" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <path d="M95.6,410 L95.6,460" fill="none" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <rect x="33.6" y="0" width="124" height="42" fill="#ECECFF" stroke="#9370DB"/><line x1="39.6" y1="0" x2="39.6" y2="42" stroke="#9370DB"/><line x1="151.6" y1="0" x2="151.6" y2="42" stroke="#9370DB"/>
+    <text x="95.6" y="25.9" fill="#333333" text-anchor="middle">Subroutine</text>
+    <path d="M42,97.04 L42,128.96 A53.6,5.04 0 0 0 149.2,128.96 A53.6,5.04 0 0 0 42,97.04 Z" fill="#ECECFF" stroke="#9370DB"/><path d="M42,97.04 A53.6,5.04 0 0 0 149.2,97.04" fill="none" stroke="#9370DB"/>
+    <text x="95.6" y="117.9" fill="#333333" text-anchor="middle">Database</text>
+    <polygon points="25.2,205 46.2,184 145,184 166,205 145,226 46.2,226" fill="#ECECFF" stroke="#9370DB"/>
+    <text x="95.6" y="209.9" fill="#333333" text-anchor="middle">Hexagon</text>
+    <polygon points="21,276 191.2,276 170.2,318 0,318" fill="#ECECFF" stroke="#9370DB"/>
+    <text x="95.6" y="301.9" fill="#333333" text-anchor="middle">Parallelogram</text>
+    <polygon points="37.8,368 153.4,368 174.4,410 16.8,410" fill="#ECECFF" stroke="#9370DB"/>
+    <text x="95.6" y="393.9" fill="#333333" text-anchor="middle">Trapezoid</text>
+    <rect x="46.2" y="460" width="98.8" height="42" rx="21" fill="#ECECFF" stroke="#9370DB"/>
+    <text x="95.6" y="485.9" fill="#333333" text-anchor="middle">Stadium</text>
+  </g>
+</svg>

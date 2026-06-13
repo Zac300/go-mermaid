@@ -64,11 +64,15 @@ func sizeNodes(g *domain.Graph, opts Options) {
 		}
 		w := float64(len([]rune(label)))*charW + padX*2
 		h := opts.FontSize + padY*2
-		if n.Shape == domain.ShapeCircle {
+		switch n.Shape {
+		case domain.ShapeCircle:
 			if w < h {
 				w = h
 			}
 			h = w
+		case domain.ShapeHexagon, domain.ShapeParallelogram, domain.ShapeParallelogramAlt,
+			domain.ShapeTrapezoid, domain.ShapeTrapezoidAlt:
+			w += h // slant on each side eats horizontal room
 		}
 		n.Size = domain.Size{W: w, H: h}
 	}

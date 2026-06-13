@@ -129,6 +129,47 @@ func writeNode(b *strings.Builder, n *domain.Node, pal theme.Palette, opts Optio
 		pts := fmt.Sprintf("%s,%s %s,%s %s,%s %s,%s",
 			num(cx), num(y), num(x+w), num(cy), num(cx), num(y+h), num(x), num(cy))
 		fmt.Fprintf(b, `    <polygon points="%s" fill="%s" stroke="%s"/>`, pts, pal.NodeFill, pal.NodeStroke)
+	case domain.ShapeHexagon:
+		k := h / 2
+		pts := fmt.Sprintf("%s,%s %s,%s %s,%s %s,%s %s,%s %s,%s",
+			num(x), num(y+h/2), num(x+k), num(y), num(x+w-k), num(y),
+			num(x+w), num(y+h/2), num(x+w-k), num(y+h), num(x+k), num(y+h))
+		fmt.Fprintf(b, `    <polygon points="%s" fill="%s" stroke="%s"/>`, pts, pal.NodeFill, pal.NodeStroke)
+	case domain.ShapeParallelogram:
+		k := h / 2
+		pts := fmt.Sprintf("%s,%s %s,%s %s,%s %s,%s",
+			num(x+k), num(y), num(x+w), num(y), num(x+w-k), num(y+h), num(x), num(y+h))
+		fmt.Fprintf(b, `    <polygon points="%s" fill="%s" stroke="%s"/>`, pts, pal.NodeFill, pal.NodeStroke)
+	case domain.ShapeParallelogramAlt:
+		k := h / 2
+		pts := fmt.Sprintf("%s,%s %s,%s %s,%s %s,%s",
+			num(x), num(y), num(x+w-k), num(y), num(x+w), num(y+h), num(x+k), num(y+h))
+		fmt.Fprintf(b, `    <polygon points="%s" fill="%s" stroke="%s"/>`, pts, pal.NodeFill, pal.NodeStroke)
+	case domain.ShapeTrapezoid:
+		k := h / 2
+		pts := fmt.Sprintf("%s,%s %s,%s %s,%s %s,%s",
+			num(x+k), num(y), num(x+w-k), num(y), num(x+w), num(y+h), num(x), num(y+h))
+		fmt.Fprintf(b, `    <polygon points="%s" fill="%s" stroke="%s"/>`, pts, pal.NodeFill, pal.NodeStroke)
+	case domain.ShapeTrapezoidAlt:
+		k := h / 2
+		pts := fmt.Sprintf("%s,%s %s,%s %s,%s %s,%s",
+			num(x), num(y), num(x+w), num(y), num(x+w-k), num(y+h), num(x+k), num(y+h))
+		fmt.Fprintf(b, `    <polygon points="%s" fill="%s" stroke="%s"/>`, pts, pal.NodeFill, pal.NodeStroke)
+	case domain.ShapeCylinder:
+		ry := h * 0.12
+		fmt.Fprintf(b, `    <path d="M%s,%s L%s,%s A%s,%s 0 0 0 %s,%s A%s,%s 0 0 0 %s,%s Z" fill="%s" stroke="%s"/>`,
+			num(x), num(y+ry), num(x), num(y+h-ry),
+			num(w/2), num(ry), num(x+w), num(y+h-ry),
+			num(w/2), num(ry), num(x), num(y+ry),
+			pal.NodeFill, pal.NodeStroke)
+		fmt.Fprintf(b, `<path d="M%s,%s A%s,%s 0 0 0 %s,%s" fill="none" stroke="%s"/>`,
+			num(x), num(y+ry), num(w/2), num(ry), num(x+w), num(y+ry), pal.NodeStroke)
+	case domain.ShapeSubroutine:
+		fmt.Fprintf(b, `    <rect x="%s" y="%s" width="%s" height="%s" fill="%s" stroke="%s"/>`,
+			num(x), num(y), num(w), num(h), pal.NodeFill, pal.NodeStroke)
+		fmt.Fprintf(b, `<line x1="%s" y1="%s" x2="%s" y2="%s" stroke="%s"/><line x1="%s" y1="%s" x2="%s" y2="%s" stroke="%s"/>`,
+			num(x+6), num(y), num(x+6), num(y+h), pal.NodeStroke,
+			num(x+w-6), num(y), num(x+w-6), num(y+h), pal.NodeStroke)
 	default: // rect
 		fmt.Fprintf(b, `    <rect x="%s" y="%s" width="%s" height="%s" fill="%s" stroke="%s"/>`,
 			num(x), num(y), num(w), num(h), pal.NodeFill, pal.NodeStroke)

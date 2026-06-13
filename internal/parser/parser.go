@@ -145,11 +145,11 @@ func (p *parser) parseNodeRef() (*domain.Node, error) {
 			return nil, p.errAt(p.cur(), "expected shape label")
 		}
 		node.Label = p.cur().Val
-		node.Shape = shapeKind(open)
 		p.next()
 		if !p.at(lexer.ShapeClose) {
 			return nil, p.errAt(p.cur(), "expected closing shape delimiter")
 		}
+		node.Shape = shapeKind(open, p.cur().Val)
 		p.next()
 	}
 	return node, nil
@@ -192,7 +192,7 @@ func direction(s string) (domain.Direction, bool) {
 	return "", false
 }
 
-func shapeKind(open string) domain.Shape {
+func shapeKind(open, closer string) domain.Shape {
 	switch open {
 	case "(":
 		return domain.ShapeRound
@@ -202,6 +202,22 @@ func shapeKind(open string) domain.Shape {
 		return domain.ShapeCircle
 	case "{":
 		return domain.ShapeDiamond
+	case "{{":
+		return domain.ShapeHexagon
+	case "[[":
+		return domain.ShapeSubroutine
+	case "[(":
+		return domain.ShapeCylinder
+	case "[/":
+		if closer == "\\]" {
+			return domain.ShapeTrapezoid
+		}
+		return domain.ShapeParallelogram
+	case "[\\":
+		if closer == "/]" {
+			return domain.ShapeTrapezoidAlt
+		}
+		return domain.ShapeParallelogramAlt
 	default:
 		return domain.ShapeRect
 	}

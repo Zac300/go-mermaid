@@ -74,6 +74,39 @@ func TestParseErrors(t *testing.T) {
 	})
 }
 
+func TestNodeShapes(t *testing.T) {
+	Convey("Given each node shape syntax", t, func() {
+		cases := []struct {
+			src   string
+			shape domain.Shape
+		}{
+			{"graph TD\nA[r]", domain.ShapeRect},
+			{"graph TD\nA(r)", domain.ShapeRound},
+			{"graph TD\nA([r])", domain.ShapeStadium},
+			{"graph TD\nA((r))", domain.ShapeCircle},
+			{"graph TD\nA{r}", domain.ShapeDiamond},
+			{"graph TD\nA{{r}}", domain.ShapeHexagon},
+			{"graph TD\nA[[r]]", domain.ShapeSubroutine},
+			{"graph TD\nA[(r)]", domain.ShapeCylinder},
+			{"graph TD\nA[/r/]", domain.ShapeParallelogram},
+			{"graph TD\nA[\\r\\]", domain.ShapeParallelogramAlt},
+			{"graph TD\nA[/r\\]", domain.ShapeTrapezoid},
+			{"graph TD\nA[\\r/]", domain.ShapeTrapezoidAlt},
+		}
+		for _, c := range cases {
+			c := c
+			Convey("When parsing "+c.src, func() {
+				g, err := parse(c.src)
+
+				Convey("Then the node shape matches", func() {
+					So(err, ShouldBeNil)
+					So(g.NodeByID("A").Shape, ShouldEqual, c.shape)
+				})
+			})
+		}
+	})
+}
+
 func TestMiddleFormLabels(t *testing.T) {
 	Convey("Given middle-form edge labels", t, func() {
 		cases := []struct {
