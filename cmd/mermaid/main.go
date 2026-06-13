@@ -17,6 +17,7 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
@@ -35,6 +36,16 @@ func main() {
 }
 
 func run() error {
+	if len(os.Args) >= 2 && os.Args[1] == "serve" {
+		fs := flag.NewFlagSet("serve", flag.ContinueOnError)
+		addr := fs.String("addr", ":8080", "listen address")
+		if err := fs.Parse(os.Args[2:]); err != nil {
+			return err
+		}
+		fmt.Fprintln(os.Stderr, "mermaid serving on", *addr)
+		return http.ListenAndServe(*addr, renderHandler())
+	}
+
 	theme := flag.String("theme", "default", "color theme: default, dark, neutral")
 	out := flag.String("o", "", "output file (single-input mode only; default stdout)")
 	padding := flag.Float64("padding", 16, "outer padding in pixels")
@@ -93,6 +104,35 @@ func renderBatch(files []string, opts []mermaid.Option) error {
 		fmt.Fprintln(os.Stderr, "wrote", dst)
 	}
 	return nil
+}
+
+// renderHandler renders the request body (POST) or ?src= (GET) to SVG.
+// The optional ?theme= query selects a theme.
+func renderHandler() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		var src string
+		if r.Method == http.MethodGet {
+			src = r.URL.Query().Get("src")
+		} else {
+			body, err := io.ReadAll(io.LimitReader(r.Body, 1<<20))
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+			src = string(body)
+		}
+		opts := []mermaid.Option{}
+		if t := r.URL.Query().Get("theme"); t != "" {
+			opts = append(opts, mermaid.WithTheme(mermaid.Theme(t)))
+		}
+		svg, err := mermaid.Render(src, opts...)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		w.Header().Set("Content-Type", "image/svg+xml")
+		_, _ = w.Write(svg)
+	}
 }
 
 func readInput(path string) ([]byte, error) {
