@@ -25,6 +25,7 @@ const (
 	kindXYChart
 	kindBlock
 	kindKanban
+	kindPacket
 )
 
 // detectKind inspects the first non-empty, non-comment line and maps its
@@ -75,6 +76,8 @@ func detectKind(src string) kind {
 			return kindBlock
 		case "kanban":
 			return kindKanban
+		case "packet-beta", "packet":
+			return kindPacket
 		default:
 			return kindUnknown
 		}

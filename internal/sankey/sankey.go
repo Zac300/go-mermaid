@@ -40,7 +40,7 @@ func Parse(src string) (*Diagram, error) {
 			continue
 		}
 		if !headerSeen {
-			if w := strings.TrimRight(strings.ToLower(firstWord(line)), "-beta"); w != "sankey" {
+			if w := strings.ToLower(firstWord(line)); w != "sankey-beta" && w != "sankey" {
 				return nil, syntax.Errorf(lineNo, 1, "expected 'sankey-beta' header")
 			}
 			headerSeen = true

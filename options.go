@@ -46,6 +46,7 @@ func DiagramTypes() []string {
 		"xychart-beta",
 		"block-beta",
 		"kanban",
+		"packet-beta",
 	}
 }
 

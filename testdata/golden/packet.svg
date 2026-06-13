@@ -1,0 +1,19 @@
+<svg role="img" xmlns="http://www.w3.org/2000/svg" width="672" height="206" viewBox="0 0 672 206" font-family="sans-serif" font-size="14">
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <text x="26" y="27" fill="#333333" text-anchor="middle" font-size="9.8">0</text>
+  <text x="186" y="27" fill="#333333" text-anchor="middle" font-size="9.8">8</text>
+  <text x="346" y="27" fill="#333333" text-anchor="middle" font-size="9.8">16</text>
+  <text x="506" y="27" fill="#333333" text-anchor="middle" font-size="9.8">24</text>
+  <rect x="16" y="30" width="320" height="34" fill="#ECECFF" stroke="#9370DB"/>
+  <text x="176" y="51.9" fill="#333333" text-anchor="middle">Source Port</text>
+  <rect x="336" y="30" width="320" height="34" fill="#ECECFF" stroke="#9370DB"/>
+  <text x="496" y="51.9" fill="#333333" text-anchor="middle">Destination Port</text>
+  <rect x="16" y="70" width="640" height="34" fill="#ECECFF" stroke="#9370DB"/>
+  <text x="336" y="91.9" fill="#333333" text-anchor="middle">Sequence Number</text>
+  <rect x="16" y="110" width="640" height="34" fill="#ECECFF" stroke="#9370DB"/>
+  <text x="336" y="131.9" fill="#333333" text-anchor="middle">Acknowledgment Number</text>
+  <rect x="16" y="150" width="80" height="34" fill="#ECECFF" stroke="#9370DB"/>
+  <text x="56" y="171.9" fill="#333333" text-anchor="middle">Data Offset</text>
+  <rect x="96" y="150" width="120" height="34" fill="#ECECFF" stroke="#9370DB"/>
+  <text x="156" y="171.9" fill="#333333" text-anchor="middle">Reserved</text>
+</svg>

@@ -40,7 +40,7 @@ func Parse(src string) (*Diagram, error) {
 			continue
 		}
 		if !headerSeen {
-			if w := strings.TrimRight(strings.ToLower(firstWord(line)), "-beta"); w != "block" {
+			if w := strings.ToLower(firstWord(line)); w != "block-beta" && w != "block" {
 				return nil, syntax.Errorf(lineNo, 1, "expected 'block-beta' header")
 			}
 			headerSeen = true
