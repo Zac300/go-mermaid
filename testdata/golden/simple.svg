@@ -2,18 +2,18 @@
   <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#333333"/></marker></defs>
   <rect width="100%" height="100%" fill="#ffffff"/>
   <g transform="translate(16,16)">
-    <path d="M102.8,42 L102.8,92" fill="none" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
-    <path d="M87.73,134 L51.87,184" fill="none" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
-    <text x="69.8" y="159" fill="#333333" text-anchor="middle" dy="-2">yes</text>
-    <path d="M114.39,134 L141.98,184" fill="none" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
-    <text x="128.18" y="159" fill="#333333" text-anchor="middle" dy="-2">no</text>
-    <path d="M152.18,184 L109.16,42" fill="none" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
-    <rect x="61.8" y="0" width="82" height="42" fill="#ECECFF" stroke="#9370DB"/>
-    <text x="102.8" y="25.9" fill="#333333" text-anchor="middle">Start</text>
-    <polygon points="102.8,92 156.4,113 102.8,134 49.2,113" fill="#ECECFF" stroke="#9370DB"/>
-    <text x="102.8" y="117.9" fill="#333333" text-anchor="middle">Decision</text>
-    <rect x="0" y="184" width="73.6" height="42" rx="21" fill="#ECECFF" stroke="#9370DB"/>
-    <text x="36.8" y="209.9" fill="#333333" text-anchor="middle">Done</text>
+    <path d="M140.87,42 L112.58,92" fill="none" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <path d="M88.72,134 L48.78,204" fill="none" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <text x="68.75" y="169" fill="#333333" text-anchor="middle" dy="-2">yes</text>
+    <path d="M112.68,134 L141.21,184" fill="none" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <text x="126.94" y="159" fill="#333333" text-anchor="middle" dy="-2">no</text>
+    <path d="M164.63,42 L204.8,113 L179.32,184" fill="none" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <rect x="111.75" y="0" width="82" height="42" fill="#ECECFF" stroke="#9370DB"/>
+    <text x="152.75" y="25.9" fill="#333333" text-anchor="middle">Start</text>
+    <polygon points="100.7,92 154.3,113 100.7,134 47.1,113" fill="#ECECFF" stroke="#9370DB"/>
+    <text x="100.7" y="117.9" fill="#333333" text-anchor="middle">Decision</text>
+    <rect x="0" y="204" width="73.6" height="42" rx="21" fill="#ECECFF" stroke="#9370DB"/>
+    <text x="36.8" y="229.9" fill="#333333" text-anchor="middle">Done</text>
     <circle cx="164.6" cy="225" r="41" fill="#ECECFF" stroke="#9370DB"/>
     <text x="164.6" y="229.9" fill="#333333" text-anchor="middle">Retry</text>
   </g>

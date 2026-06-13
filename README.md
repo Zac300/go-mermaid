@@ -140,11 +140,13 @@ Notes, loops, alt/opt and activations are parsed but not yet drawn (skipped).
 
 ## Roadmap
 
-- [ ] Network-simplex ranking (tighter flowchart layouts)
-- [ ] Crossing minimization (median/barycenter ordering)
-- [ ] Orthogonal/spline edge routing
-- [ ] Flowchart subgraphs
+- [x] Crossing minimization (median heuristic, dummy nodes for long edges)
+- [x] Barycenter x-positioning (parents centered over children)
+- [x] Multi-rank edge bends and self-loops
 - [x] Sequence diagrams
+- [ ] Network-simplex ranking (tighter flowchart layouts)
+- [ ] Orthogonal/spline edge routing (edges are straight segments today)
+- [ ] Flowchart subgraphs
 - [ ] Sequence notes / loops / alt / activations
 - [ ] Class, state, ER diagrams
 - [ ] PNG output

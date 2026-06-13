@@ -114,6 +114,48 @@ func TestCompute(t *testing.T) {
 		})
 	})
 
+	Convey("Given an edge spanning multiple ranks (A->B->C and A->C)", t, func() {
+		g := graphFrom("graph TD\nA --> B\nB --> C\nA --> C")
+
+		Convey("When computing the layout", func() {
+			_, err := Compute(g, opts)
+
+			Convey("Then the long edge bends through a dummy waypoint", func() {
+				So(err, ShouldBeNil)
+				// Edges[2] is A->C, spanning two ranks.
+				So(len(g.Edges[2].Points), ShouldBeGreaterThanOrEqualTo, 3)
+			})
+		})
+	})
+
+	Convey("Given a parent with two children (A->B, A->C)", t, func() {
+		g := graphFrom("graph TD\nA --> B\nA --> C")
+
+		Convey("When computing the layout", func() {
+			_, err := Compute(g, opts)
+
+			Convey("Then the parent is centered over its children", func() {
+				So(err, ShouldBeNil)
+				a, b, c := g.NodeByID("A"), g.NodeByID("B"), g.NodeByID("C")
+				mid := (b.Center().X + c.Center().X) / 2
+				So(a.Center().X, ShouldAlmostEqual, mid, 0.5)
+			})
+		})
+	})
+
+	Convey("Given a self-loop A->A", t, func() {
+		g := graphFrom("graph TD\nA --> A")
+
+		Convey("When computing the layout", func() {
+			_, err := Compute(g, opts)
+
+			Convey("Then the edge is routed as a multi-point loop", func() {
+				So(err, ShouldBeNil)
+				So(len(g.Edges[0].Points), ShouldBeGreaterThanOrEqualTo, 4)
+			})
+		})
+	})
+
 	Convey("Given a circle node", t, func() {
 		g := graphFrom("graph TD\nA((Round))")
 

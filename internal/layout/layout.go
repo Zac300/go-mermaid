@@ -1,8 +1,9 @@
 // Package layout assigns coordinates to a domain.Graph using a layered
-// (Sugiyama-style) approach: make the graph acyclic, rank nodes into
-// layers, order within layers to reduce crossings, then assign pixel
-// positions. v0 uses longest-path ranking; network-simplex can replace
-// it behind the same interface.
+// (Sugiyama-style) approach: make the graph acyclic, rank nodes into layers,
+// insert dummy nodes so long edges can bend, order within layers to reduce
+// crossings, then assign positions with a barycenter heuristic. v0 uses
+// longest-path ranking; network-simplex can replace it behind the same
+// interface.
 package layout
 
 import (
@@ -25,21 +26,25 @@ type Result struct {
 	Height float64
 }
 
-// Compute lays out g in place and returns the result. The input graph's
-// nodes and edges are mutated with positions and routed points.
+// Compute lays out g in place and returns the result. The input graph's nodes
+// and edges are mutated with positions and routed points.
 func Compute(g *domain.Graph, opts Options) (*Result, error) {
 	sizeNodes(g, opts)
 
 	reversed := makeAcyclic(g)
 	ranks := assignRanks(g)
-	layers := orderLayers(g, ranks)
 
-	w, h := position(g, layers, opts)
-	// Restore original edge directions before routing so arrowheads point
-	// the right way on edges that were reversed to break cycles.
+	lg := buildLGraph(g, ranks)
+	reduceCrossings(lg)
+	totalPrimary := positionLG(lg, g.Direction, opts)
+
+	writeBackNodes(lg, g, totalPrimary)
+	// Restore original edge directions before routing so arrowheads point the
+	// right way on edges that were reversed to break cycles.
 	restoreReversed(g, reversed)
-	routeEdges(g)
+	routeEdges(lg, g, totalPrimary)
 
+	w, h := bounds(g)
 	return &Result{Graph: g, Width: w, Height: h}, nil
 }
 
@@ -64,21 +69,70 @@ func sizeNodes(g *domain.Graph, opts Options) {
 	}
 }
 
-// routeEdges sets a straight two-point polyline running from the boundary of
-// the source box to the boundary of the target box, so arrowheads land on the
-// node edge rather than hidden under its center. Orthogonal/spline routing is
-// a later refinement.
-func routeEdges(g *domain.Graph) {
+// center maps an lnode's rank-space coordinates to a screen point, honoring
+// the diagram direction (BT/RL flip the primary axis).
+func (ln *lnode) center(dir domain.Direction, totalPrimary float64) domain.Point {
+	switch dir {
+	case domain.BottomTop:
+		return domain.Point{X: ln.cross, Y: totalPrimary - ln.pc}
+	case domain.LeftRight:
+		return domain.Point{X: ln.pc, Y: ln.cross}
+	case domain.RightLeft:
+		return domain.Point{X: totalPrimary - ln.pc, Y: ln.cross}
+	default: // TopBottom
+		return domain.Point{X: ln.cross, Y: ln.pc}
+	}
+}
+
+// writeBackNodes sets each real node's top-left position from its center.
+func writeBackNodes(lg *lgraph, g *domain.Graph, totalPrimary float64) {
+	for _, layer := range lg.layers {
+		for _, ln := range layer {
+			if ln.real == nil {
+				continue
+			}
+			c := ln.center(g.Direction, totalPrimary)
+			ln.real.Pos = domain.Point{X: c.X - ln.w/2, Y: c.Y - ln.h/2}
+		}
+	}
+}
+
+// routeEdges builds each edge's polyline through its dummy chain, clipping the
+// first and last segments to the node boundaries so arrowheads land on the
+// box edge. Self-edges are routed as a small loop beside the node.
+func routeEdges(lg *lgraph, g *domain.Graph, totalPrimary float64) {
 	for _, e := range g.Edges {
-		from := g.NodeByID(e.From)
-		to := g.NodeByID(e.To)
-		if from == nil || to == nil {
+		chain := lg.chains[e]
+		if len(chain) < 2 {
 			continue
 		}
-		fc, tc := from.Center(), to.Center()
-		start := clipToBox(fc, from.Size, tc)
-		end := clipToBox(tc, to.Size, fc)
-		e.Points = []domain.Point{start, end}
+		if e.From == e.To {
+			e.Points = selfLoop(chain[0], g.Direction, totalPrimary)
+			continue
+		}
+		pts := make([]domain.Point, len(chain))
+		for i, ln := range chain {
+			pts[i] = ln.center(g.Direction, totalPrimary)
+		}
+		from, to := chain[0], chain[len(chain)-1]
+		pts[0] = clipToBox(pts[0], domain.Size{W: from.w, H: from.h}, pts[1])
+		last := len(pts) - 1
+		pts[last] = clipToBox(pts[last], domain.Size{W: to.w, H: to.h}, pts[last-1])
+		e.Points = pts
+	}
+}
+
+// selfLoop returns a small rectangular loop on the trailing side of a node.
+func selfLoop(ln *lnode, dir domain.Direction, totalPrimary float64) []domain.Point {
+	c := ln.center(dir, totalPrimary)
+	const out = 24.0
+	rx := c.X + ln.w/2
+	qy := ln.h / 4
+	return []domain.Point{
+		{X: rx, Y: c.Y - qy},
+		{X: rx + out, Y: c.Y - qy},
+		{X: rx + out, Y: c.Y + qy},
+		{X: rx, Y: c.Y + qy},
 	}
 }
 
@@ -99,4 +153,27 @@ func clipToBox(center domain.Point, size domain.Size, target domain.Point) domai
 		t = math.Min(t, hh/math.Abs(dy))
 	}
 	return domain.Point{X: center.X + dx*t, Y: center.Y + dy*t}
+}
+
+// bounds computes the diagram extent over node boxes and routed edge points.
+func bounds(g *domain.Graph) (width, height float64) {
+	for _, n := range g.Nodes {
+		if r := n.Pos.X + n.Size.W; r > width {
+			width = r
+		}
+		if b := n.Pos.Y + n.Size.H; b > height {
+			height = b
+		}
+	}
+	for _, e := range g.Edges {
+		for _, p := range e.Points {
+			if p.X > width {
+				width = p.X
+			}
+			if p.Y > height {
+				height = p.Y
+			}
+		}
+	}
+	return width, height
 }
