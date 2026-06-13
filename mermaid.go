@@ -25,6 +25,7 @@ import (
 
 	"github.com/Zac300/go-mermaid/internal/class"
 	"github.com/Zac300/go-mermaid/internal/er"
+	"github.com/Zac300/go-mermaid/internal/journey"
 	"github.com/Zac300/go-mermaid/internal/layout"
 	"github.com/Zac300/go-mermaid/internal/lexer"
 	"github.com/Zac300/go-mermaid/internal/parser"
@@ -88,6 +89,11 @@ func Render(src string, opts ...Option) (out []byte, err error) {
 		err = wrapParse(err)
 	case kindER:
 		raw, err = er.Render(body, er.RenderOptions{
+			Theme: string(cfg.theme), FontFace: cfg.fontFace, FontSize: cfg.fontSize, Padding: cfg.padding, Title: title,
+		})
+		err = wrapParse(err)
+	case kindJourney:
+		raw, err = journey.Render(body, journey.RenderOptions{
 			Theme: string(cfg.theme), FontFace: cfg.fontFace, FontSize: cfg.fontSize, Padding: cfg.padding, Title: title,
 		})
 		err = wrapParse(err)

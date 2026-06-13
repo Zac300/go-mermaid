@@ -13,6 +13,7 @@ const (
 	kindClass
 	kindState
 	kindER
+	kindJourney
 )
 
 // detectKind inspects the first non-empty, non-comment line and maps its
@@ -38,6 +39,8 @@ func detectKind(src string) kind {
 			return kindState
 		case "erdiagram":
 			return kindER
+		case "journey":
+			return kindJourney
 		default:
 			return kindUnknown
 		}
