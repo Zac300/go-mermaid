@@ -1,6 +1,7 @@
 package render
 
 import (
+	"math"
 	"strings"
 	"testing"
 
@@ -105,7 +106,7 @@ func TestNum(t *testing.T) {
 		{12.5, "12.5"},
 		{12.25, "12.25"},
 		{0, "0"},
-		{-0.0, "0"},
+		{math.Copysign(0, -1), "0"}, // negative zero must normalize to "0"
 		{1.200, "1.2"},
 	}
 	for _, c := range cases {

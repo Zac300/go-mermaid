@@ -44,7 +44,7 @@ func TestRunStdinToStdout(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer f.Close()
+	defer func() { _ = f.Close() }()
 
 	oldIn, oldOut := os.Stdin, os.Stdout
 	defer func() { os.Stdin, os.Stdout = oldIn, oldOut }()
@@ -58,7 +58,7 @@ func TestRunStdinToStdout(t *testing.T) {
 	os.Stdout = w
 	resetFlags("-")
 	runErr := run()
-	w.Close()
+	_ = w.Close()
 	os.Stdout = oldOut
 	if runErr != nil {
 		t.Fatalf("run: %v", runErr)
