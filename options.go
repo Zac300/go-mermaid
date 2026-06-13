@@ -64,6 +64,9 @@ type config struct {
 	nodeSep  float64 // horizontal gap between nodes in a rank
 	rankSep  float64 // gap between ranks
 	curved   bool    // render flowchart edges as smooth curves
+
+	bgColor       string // override background color
+	bgTransparent bool   // omit the background rect entirely
 }
 
 func defaultConfig() config {
@@ -126,4 +129,15 @@ func WithSpacing(nodeSep, rankSep float64) Option {
 // straight orthogonal segments.
 func WithCurvedEdges(on bool) Option {
 	return func(c *config) { c.curved = on }
+}
+
+// WithBackground overrides the diagram background color (any CSS color).
+func WithBackground(color string) Option {
+	return func(c *config) { c.bgColor = color; c.bgTransparent = false }
+}
+
+// WithTransparentBackground removes the background rect so the diagram blends
+// with whatever it is embedded in.
+func WithTransparentBackground() Option {
+	return func(c *config) { c.bgTransparent = true; c.bgColor = "" }
 }

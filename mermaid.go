@@ -184,7 +184,7 @@ func Render(src string, opts ...Option) (out []byte, err error) {
 	if a11yTitle == "" {
 		a11yTitle = title
 	}
-	return injectA11y(raw, a11yTitle, accDescr), nil
+	return applyBackground(injectA11y(raw, a11yTitle, accDescr), cfg), nil
 }
 
 // RenderTo renders src and writes the SVG to w. It is a convenience over

@@ -42,6 +42,24 @@ func TestOptions(t *testing.T) {
 			})
 		})
 
+		Convey("When setting a custom background", func() {
+			out, err := mermaid.Render(src, mermaid.WithBackground("#101820"))
+
+			Convey("Then the background rect uses that color", func() {
+				So(err, ShouldBeNil)
+				So(string(out), ShouldContainSubstring, `fill="#101820"`)
+			})
+		})
+
+		Convey("When requesting a transparent background", func() {
+			out, err := mermaid.Render(src, mermaid.WithTransparentBackground())
+
+			Convey("Then no full-canvas background rect is emitted", func() {
+				So(err, ShouldBeNil)
+				So(string(out), ShouldNotContainSubstring, `width="100%" height="100%"`)
+			})
+		})
+
 		Convey("When using the neutral theme", func() {
 			out, err := mermaid.Render(src, mermaid.WithTheme(mermaid.Neutral))
 			So(err, ShouldBeNil)
