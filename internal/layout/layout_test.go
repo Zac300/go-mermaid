@@ -143,6 +143,26 @@ func TestCompute(t *testing.T) {
 		})
 	})
 
+	Convey("Given diverging edges that need bends (A->B, A->C)", t, func() {
+		g := graphFrom("graph TD\nA --> B\nA --> C")
+
+		Convey("When computing the layout", func() {
+			_, err := Compute(g, opts)
+
+			Convey("Then every edge segment is axis-aligned (orthogonal)", func() {
+				So(err, ShouldBeNil)
+				for _, e := range g.Edges {
+					for i := 1; i < len(e.Points); i++ {
+						a, b := e.Points[i-1], e.Points[i]
+						horizontal := a.Y == b.Y
+						vertical := a.X == b.X
+						So(horizontal || vertical, ShouldBeTrue)
+					}
+				}
+			})
+		})
+	})
+
 	Convey("Given a self-loop A->A", t, func() {
 		g := graphFrom("graph TD\nA --> A")
 

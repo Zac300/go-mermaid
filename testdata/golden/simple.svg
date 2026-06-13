@@ -2,12 +2,12 @@
   <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#333333"/></marker></defs>
   <rect width="100%" height="100%" fill="#ffffff"/>
   <g transform="translate(16,16)">
-    <path d="M140.87,42 L112.58,92" fill="none" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
-    <path d="M88.72,134 L48.78,204" fill="none" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <path d="M152.75,42 L152.75,67 L100.7,67 L100.7,92" fill="none" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <path d="M100.7,134 L100.7,169 L36.8,169 L36.8,204" fill="none" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
     <text x="68.75" y="169" fill="#333333" text-anchor="middle" dy="-2">yes</text>
-    <path d="M112.68,134 L141.21,184" fill="none" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
-    <text x="126.94" y="159" fill="#333333" text-anchor="middle" dy="-2">no</text>
-    <path d="M164.63,42 L204.8,113 L179.32,184" fill="none" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <path d="M100.7,134 L100.7,169 L164.6,169 L164.6,184" fill="none" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <text x="132.65" y="159" fill="#333333" text-anchor="middle" dy="-2">no</text>
+    <path d="M152.75,42 L152.75,67 L204.8,67 L204.8,113 L204.8,169 L164.6,169 L164.6,184" fill="none" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
     <rect x="111.75" y="0" width="82" height="42" fill="#ECECFF" stroke="#9370DB"/>
     <text x="152.75" y="25.9" fill="#333333" text-anchor="middle">Start</text>
     <polygon points="100.7,92 154.3,113 100.7,134 47.1,113" fill="#ECECFF" stroke="#9370DB"/>

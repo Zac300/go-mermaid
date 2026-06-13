@@ -114,12 +114,41 @@ func routeEdges(lg *lgraph, g *domain.Graph, totalPrimary float64) {
 		for i, ln := range chain {
 			pts[i] = ln.center(g.Direction, totalPrimary)
 		}
+		vertical := g.Direction == domain.TopBottom || g.Direction == domain.BottomTop
+		pts = orthogonalize(pts, vertical)
 		from, to := chain[0], chain[len(chain)-1]
 		pts[0] = clipToBox(pts[0], domain.Size{W: from.w, H: from.h}, pts[1])
 		last := len(pts) - 1
 		pts[last] = clipToBox(pts[last], domain.Size{W: to.w, H: to.h}, pts[last-1])
 		e.Points = pts
 	}
+}
+
+// orthogonalize converts a polyline of waypoint centers into a right-angle
+// (Manhattan) path. Between consecutive points it inserts an elbow at the
+// midpoint of the primary axis, so segments are either horizontal or vertical.
+// Aligned points produce no elbow, keeping straight edges straight.
+func orthogonalize(pts []domain.Point, vertical bool) []domain.Point {
+	if len(pts) < 2 {
+		return pts
+	}
+	out := []domain.Point{pts[0]}
+	for i := 1; i < len(pts); i++ {
+		a, b := out[len(out)-1], pts[i]
+		if vertical {
+			if a.X != b.X {
+				mid := (a.Y + b.Y) / 2
+				out = append(out, domain.Point{X: a.X, Y: mid}, domain.Point{X: b.X, Y: mid})
+			}
+		} else {
+			if a.Y != b.Y {
+				mid := (a.X + b.X) / 2
+				out = append(out, domain.Point{X: mid, Y: a.Y}, domain.Point{X: mid, Y: b.Y})
+			}
+		}
+		out = append(out, b)
+	}
+	return out
 }
 
 // selfLoop returns a small rectangular loop on the trailing side of a node.
