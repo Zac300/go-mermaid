@@ -10,7 +10,7 @@ Render [Mermaid](https://mermaid.js.org) diagrams to SVG in **pure Go** — no
 headless browser, no Node.js, no JavaScript runtime. Just a library and a
 single static binary.
 
-> **Status:** pre-1.0, actively developed. 17 diagram types supported (see
+> **Status:** pre-1.0, actively developed. 18 diagram types supported (see
 > the [table below](#diagram-types)). Not affiliated with the Mermaid project;
 > this is an independent, compatible renderer.
 
@@ -119,6 +119,7 @@ The renderer dispatches on the diagram header. Status vs. Mermaid:
 | Sankey | `sankey-beta` | proportional flow bands |
 | XY chart | `xychart-beta` | bar and line charts |
 | Block | `block-beta` | column grid of labeled blocks |
+| Kanban | `kanban` | columns of cards by indentation |
 
 Flowchart extras: curved edges (`WithCurvedEdges`), clickable nodes
 (`click ID href`).
@@ -174,7 +175,7 @@ Rendering is fast — roughly 10–50µs per diagram with no external processes.
 - [x] Sequence diagrams
 - [x] Orthogonal + curved edge routing, subgraphs, styling, 12 node shapes
 - [x] Sequence notes, activations, loop/alt/opt frames, autonumber
-- [x] 17 diagram types (see table above)
+- [x] 18 diagram types (see table above)
 - [x] Front-matter titles, accessibility (title/desc), 5 themes, clickable nodes
 - [x] CLI batch render, `serve` HTTP mode, fuzz-tested parsers
 - [ ] Network-simplex ranking (tighter flowchart layouts)
