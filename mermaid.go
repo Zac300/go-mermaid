@@ -25,6 +25,7 @@ import (
 
 	"github.com/Zac300/go-mermaid/internal/class"
 	"github.com/Zac300/go-mermaid/internal/er"
+	gitgraph "github.com/Zac300/go-mermaid/internal/git"
 	"github.com/Zac300/go-mermaid/internal/journey"
 	"github.com/Zac300/go-mermaid/internal/layout"
 	"github.com/Zac300/go-mermaid/internal/lexer"
@@ -100,6 +101,11 @@ func Render(src string, opts ...Option) (out []byte, err error) {
 		err = wrapParse(err)
 	case kindQuadrant:
 		raw, err = quadrant.Render(body, quadrant.RenderOptions{
+			Theme: string(cfg.theme), FontFace: cfg.fontFace, FontSize: cfg.fontSize, Padding: cfg.padding, Title: title,
+		})
+		err = wrapParse(err)
+	case kindGit:
+		raw, err = gitgraph.Render(body, gitgraph.RenderOptions{
 			Theme: string(cfg.theme), FontFace: cfg.fontFace, FontSize: cfg.fontSize, Padding: cfg.padding, Title: title,
 		})
 		err = wrapParse(err)

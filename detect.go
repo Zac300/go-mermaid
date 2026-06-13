@@ -15,6 +15,7 @@ const (
 	kindER
 	kindJourney
 	kindQuadrant
+	kindGit
 )
 
 // detectKind inspects the first non-empty, non-comment line and maps its
@@ -26,7 +27,7 @@ func detectKind(src string) kind {
 		if line == "" || strings.HasPrefix(line, "%%") {
 			continue
 		}
-		word := strings.ToLower(firstField(line))
+		word := strings.TrimRight(strings.ToLower(firstField(line)), ":")
 		switch word {
 		case "graph", "flowchart":
 			return kindFlowchart
@@ -44,6 +45,8 @@ func detectKind(src string) kind {
 			return kindJourney
 		case "quadrantchart":
 			return kindQuadrant
+		case "gitgraph":
+			return kindGit
 		default:
 			return kindUnknown
 		}
