@@ -49,7 +49,8 @@ func RasterizeSVG(svg []byte, scale float64) ([]byte, error) {
 	raster := rasterx.NewDasher(w, h, scanner)
 	icon.Draw(raster, 1.0)
 
-	// oksvg ignores <text>; draw labels ourselves.
+	// oksvg ignores markers and <text>; draw arrowheads and labels ourselves.
+	drawArrows(img, string(svg), scale)
 	drawText(img, string(svg), scale, rootFontSize(svg))
 
 	var buf bytes.Buffer
