@@ -259,9 +259,12 @@ func writeNode(b *strings.Builder, n *domain.Node, pal theme.Palette, opts Optio
 		fmt.Fprintf(b, `    <polygon points="%s" fill="%s" stroke="%s"/>`, pts, fill, stroke)
 	case domain.ShapeCylinder:
 		ry := h * 0.12
-		fmt.Fprintf(b, `    <path d="M%s,%s L%s,%s A%s,%s 0 0 0 %s,%s A%s,%s 0 0 0 %s,%s Z" fill="%s" stroke="%s"/>`,
+		// Body: down the left, curve under the bottom, up the right, dome over
+		// the top. The front lip is overdrawn so the top reads as a 3-D rim.
+		fmt.Fprintf(b, `    <path d="M%s,%s L%s,%s A%s,%s 0 0 0 %s,%s L%s,%s A%s,%s 0 0 0 %s,%s Z" fill="%s" stroke="%s"/>`,
 			num(x), num(y+ry), num(x), num(y+h-ry),
 			num(w/2), num(ry), num(x+w), num(y+h-ry),
+			num(x+w), num(y+ry),
 			num(w/2), num(ry), num(x), num(y+ry),
 			fill, stroke)
 		fmt.Fprintf(b, `<path d="M%s,%s A%s,%s 0 0 0 %s,%s" fill="none" stroke="%s"/>`,

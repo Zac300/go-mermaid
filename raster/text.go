@@ -3,6 +3,7 @@ package raster
 import (
 	"image"
 	"image/color"
+	"math"
 	"regexp"
 	"strconv"
 	"strings"
@@ -10,10 +11,12 @@ import (
 	xhtml "html"
 
 	"github.com/Zac300/go-mermaid/internal/svgutil"
+	xdraw "golang.org/x/image/draw"
 	"golang.org/x/image/font"
 	"golang.org/x/image/font/gofont/gobold"
 	"golang.org/x/image/font/gofont/goregular"
 	"golang.org/x/image/font/opentype"
+	"golang.org/x/image/math/f64"
 	"golang.org/x/image/math/fixed"
 )
 
@@ -25,6 +28,7 @@ var (
 	tspanRe    = regexp.MustCompile(`(?s)<tspan\b([^>]*)>(.*?)</tspan>`)
 	attrRe     = regexp.MustCompile(`([\w-]+)="([^"]*)"`)
 	groupRe    = regexp.MustCompile(`<g transform="translate\(([0-9.-]+),([0-9.-]+)\)">`)
+	rotateRe   = regexp.MustCompile(`rotate\(\s*(-?[0-9.]+)(?:[ ,]+(-?[0-9.]+)[ ,]+(-?[0-9.]+))?\s*\)`)
 	regularFnt *opentype.Font
 	boldFnt    *opentype.Font
 )
@@ -67,39 +71,97 @@ func drawText(img *image.RGBA, svg string, scale, rootSize float64) {
 		}
 		x := numAttr(attrs["x"], "0")
 		y := numAttr(attrs["y"], "0")
+		if m := rotateRe.FindStringSubmatch(attrs["transform"]); m != nil {
+			ang, _ := strconv.ParseFloat(m[1], 64)
+			cx, cy := x, y
+			if m[2] != "" {
+				cx, _ = strconv.ParseFloat(m[2], 64)
+				cy, _ = strconv.ParseFloat(m[3], 64)
+			}
+			drawRotated(img, xhtml.UnescapeString(inner), x+ox, y+oy, (cx+ox)*scale, (cy+oy)*scale, ang, size, scale, fill, bold, anchor)
+			continue
+		}
 		drawString(img, xhtml.UnescapeString(inner), x+ox, y+oy, size, scale, fill, bold, anchor)
 	}
+}
+
+// buildFace returns a font face sized to px and the advance width of s, shrunk
+// to the width the layout reserved (svgutil.TextWidth) so glyphs stay in place.
+func buildFace(s string, size, scale float64, bold bool) (font.Face, float64) {
+	fnt := regularFnt
+	if bold {
+		fnt = boldFnt
+	}
+	if fnt == nil {
+		return nil, 0
+	}
+	px := size * scale
+	face, err := opentype.NewFace(fnt, &opentype.FaceOptions{Size: px, DPI: 72})
+	if err != nil {
+		return nil, 0
+	}
+	adv := float64(font.MeasureString(face, s)) / 64
+	if reserved := svgutil.TextWidth(s, size) * scale; reserved > 0 && adv > reserved {
+		_ = face.Close()
+		px *= reserved / adv
+		face, err = opentype.NewFace(fnt, &opentype.FaceOptions{Size: px, DPI: 72})
+		if err != nil {
+			return nil, 0
+		}
+		adv = float64(font.MeasureString(face, s)) / 64
+	}
+	return face, adv
+}
+
+// drawRotated renders s horizontally to a temp image, then rotates it by ang
+// degrees about (px,py) onto img — oksvg ignores text transforms, so we apply
+// the rotation ourselves (used for vertical axis labels).
+func drawRotated(img *image.RGBA, s string, x, y, px, py, ang, size, scale float64, fill color.Color, bold bool, anchor string) {
+	if strings.TrimSpace(s) == "" {
+		return
+	}
+	face, adv := buildFace(s, size, scale, bold)
+	if face == nil {
+		return
+	}
+	defer func() { _ = face.Close() }()
+
+	startX := x * scale
+	switch anchor {
+	case "middle":
+		startX -= adv / 2
+	case "end":
+		startX -= adv
+	}
+	ascent := size * scale * 0.8
+	descent := size * scale * 0.3
+	topY := y*scale - ascent
+	tw := int(math.Ceil(adv)) + 2
+	th := int(math.Ceil(ascent+descent)) + 2
+	if tw <= 0 || th <= 0 {
+		return
+	}
+	tmp := image.NewRGBA(image.Rect(0, 0, tw, th))
+	d := &font.Drawer{Dst: tmp, Src: image.NewUniform(fill), Face: face}
+	d.Dot = fixed.Point26_6{X: 0, Y: fixed.Int26_6(ascent * 64)}
+	d.DrawString(s)
+
+	rad := ang * math.Pi / 180
+	cos, sin := math.Cos(rad), math.Sin(rad)
+	s2d := f64.Aff3{
+		cos, -sin, cos*(startX-px) - sin*(topY-py) + px,
+		sin, cos, sin*(startX-px) + cos*(topY-py) + py,
+	}
+	xdraw.BiLinear.Transform(img, s2d, tmp, tmp.Bounds(), xdraw.Over, nil)
 }
 
 func drawString(img *image.RGBA, s string, x, y, size, scale float64, fill color.Color, bold bool, anchor string) {
 	if strings.TrimSpace(s) == "" {
 		return
 	}
-	fnt := regularFnt
-	if bold {
-		fnt = boldFnt
-	}
-	if fnt == nil {
+	face, adv := buildFace(s, size, scale, bold)
+	if face == nil {
 		return
-	}
-	px := size * scale
-	face, err := opentype.NewFace(fnt, &opentype.FaceOptions{Size: px, DPI: 72})
-	if err != nil {
-		return
-	}
-	adv := float64(font.MeasureString(face, s)) / 64
-
-	// The layout reserved space using svgutil.TextWidth (sans-serif metrics).
-	// The Go font is wider, so shrink to fit the reserved width and keep PNG
-	// labels inside their boxes.
-	if reserved := svgutil.TextWidth(s, size) * scale; reserved > 0 && adv > reserved {
-		_ = face.Close()
-		px *= reserved / adv
-		face, err = opentype.NewFace(fnt, &opentype.FaceOptions{Size: px, DPI: 72})
-		if err != nil {
-			return
-		}
-		adv = float64(font.MeasureString(face, s)) / 64
 	}
 	defer func() { _ = face.Close() }()
 
