@@ -42,6 +42,25 @@ func TestMultilineText(t *testing.T) {
 	})
 }
 
+func TestTextWidth(t *testing.T) {
+	Convey("Given text at a font size", t, func() {
+		Convey("When measuring", func() {
+			Convey("Then wide glyphs are wider than narrow ones", func() {
+				So(TextWidth("WWWW", 14), ShouldBeGreaterThan, TextWidth("iiii", 14))
+			})
+			Convey("Then width scales with font size", func() {
+				So(TextWidth("hello", 28), ShouldAlmostEqual, TextWidth("hello", 14)*2, 0.01)
+			})
+			Convey("Then empty text has zero width", func() {
+				So(TextWidth("", 14), ShouldEqual, 0)
+			})
+			Convey("Then non-ASCII falls back to an estimate", func() {
+				So(TextWidth("日本語", 14), ShouldBeGreaterThan, 0)
+			})
+		})
+	})
+}
+
 func TestNum(t *testing.T) {
 	Convey("Given numbers", t, func() {
 		Convey("When formatted", func() {

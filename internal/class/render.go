@@ -203,14 +203,13 @@ func unit(a, b domain.Point) (float64, float64) {
 
 // classSize computes a box size that fits the name and all members.
 func classSize(c *Class, fontSize float64) domain.Size {
-	charW := fontSize * 0.6
-	maxLen := len([]rune(c.Name))
+	maxW := svgutil.TextWidth(c.Name, fontSize)
 	for _, m := range append(append([]string{}, c.Attributes...), c.Methods...) {
-		if l := len([]rune(m)); l > maxLen {
-			maxLen = l
+		if wd := svgutil.TextWidth(m, fontSize); wd > maxW {
+			maxW = wd
 		}
 	}
-	w := float64(maxLen)*charW + boxPadX*2
+	w := maxW + boxPadX*2
 	if w < 80 {
 		w = 80
 	}

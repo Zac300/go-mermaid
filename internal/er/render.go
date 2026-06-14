@@ -191,14 +191,13 @@ func writeCrow(b *strings.Builder, kind Card, tip, next domain.Point, pal theme.
 }
 
 func entitySize(e *Entity, fontSize float64) domain.Size {
-	charW := fontSize * 0.6
-	maxLen := len([]rune(e.Name))
+	maxW := svgutil.TextWidth(e.Name, fontSize)
 	for _, a := range e.Attributes {
-		if l := len([]rune(a)); l > maxLen {
-			maxLen = l
+		if wd := svgutil.TextWidth(a, fontSize); wd > maxW {
+			maxW = wd
 		}
 	}
-	w := float64(maxLen)*charW + boxPadX*2
+	w := maxW + boxPadX*2
 	if w < 90 {
 		w = 90
 	}

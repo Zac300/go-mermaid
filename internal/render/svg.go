@@ -63,7 +63,7 @@ func SVG(res *layout.Result, opts Options) ([]byte, error) {
 		}
 	}
 	contentW := maxX - minX
-	if tw := opts.FontSize * 0.6 * float64(len([]rune(opts.Title))); tw > contentW {
+	if tw := svgutil.TextWidth(opts.Title, opts.FontSize); tw > contentW {
 		contentW = tw
 	}
 	shiftX, shiftY := -minX, -minY
@@ -138,7 +138,7 @@ func writeEdge(b *strings.Builder, e *domain.Edge, pal theme.Palette, curved boo
 		// the target endpoint for a two-point line).
 		first, last := e.Points[0], e.Points[len(e.Points)-1]
 		midX, midY := (first.X+last.X)/2, (first.Y+last.Y)/2
-		tw := fontSize*0.6*float64(len([]rune(e.Label))) + 6
+		tw := svgutil.TextWidth(e.Label, fontSize) + 6
 		fmt.Fprintf(b, `    <rect x="%s" y="%s" width="%s" height="%s" fill="%s"/>`,
 			num(midX-tw/2), num(midY-fontSize), num(tw), num(fontSize+4), pal.Background)
 		b.WriteByte('\n')

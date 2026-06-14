@@ -32,7 +32,7 @@ func svg(lay *Layout, o RenderOptions) []byte {
 	pad := o.Padding
 	titleH := svgutil.TitleHeight(o.Title, o.FontSize)
 	contentW := lay.Width
-	if tw := o.FontSize * 0.6 * float64(len([]rune(o.Title))); tw > contentW {
+	if tw := svgutil.TextWidth(o.Title, o.FontSize); tw > contentW {
 		contentW = tw
 	}
 	w := contentW + pad*2
@@ -176,7 +176,7 @@ func writeFrame(b *strings.Builder, f *Frame, lay *Layout, pal theme.Palette, o 
 		svgutil.Num(x), svgutil.Num(top), svgutil.Num(w), svgutil.Num(bot-top), pal.NodeStroke)
 	b.WriteByte('\n')
 
-	tabW := float64(len([]rune(f.Type)))*o.FontSize*0.6 + 12
+	tabW := svgutil.TextWidth(f.Type, o.FontSize) + 12
 	fmt.Fprintf(b, `    <rect x="%s" y="%s" width="%s" height="%s" fill="%s" stroke="%s"/>`,
 		svgutil.Num(x), svgutil.Num(top), svgutil.Num(tabW), svgutil.Num(o.FontSize+6), pal.NodeFill, pal.NodeStroke)
 	b.WriteByte('\n')

@@ -1,29 +1,29 @@
 <svg role="img" xmlns="http://www.w3.org/2000/svg" width="542" height="202" viewBox="0 0 542 202" font-family="sans-serif" font-size="14">
   <rect width="100%" height="100%" fill="#ffffff"/>
-  <path d="M94.8,101 C140.4,101 140.4,50 186,50" fill="none" stroke="#333333"/>
-  <path d="M264.8,50 C310.4,50 310.4,33 356,33" fill="none" stroke="#333333"/>
-  <path d="M264.8,50 C310.4,50 310.4,67 356,67" fill="none" stroke="#333333"/>
-  <path d="M94.8,101 C140.4,101 140.4,101 186,101" fill="none" stroke="#333333"/>
-  <path d="M273.2,101 C314.6,101 314.6,101 356,101" fill="none" stroke="#333333"/>
-  <path d="M94.8,101 C140.4,101 140.4,152 186,152" fill="none" stroke="#333333"/>
-  <path d="M248,152 C302,152 302,135 356,135" fill="none" stroke="#333333"/>
-  <path d="M248,152 C302,152 302,169 356,169" fill="none" stroke="#333333"/>
-  <rect x="16" y="84" width="78.8" height="26" rx="13" fill="#ECECFF" stroke="#9370DB"/>
-  <text x="55.4" y="101.9" fill="#333333" text-anchor="middle">Mindmap</text>
-  <rect x="186" y="33" width="78.8" height="26" rx="13" fill="#ECECFF" stroke="#9370DB"/>
-  <text x="225.4" y="50.9" fill="#333333" text-anchor="middle">Origins</text>
-  <rect x="356" y="16" width="120.8" height="26" rx="13" fill="#ECECFF" stroke="#9370DB"/>
-  <text x="416.4" y="33.9" fill="#333333" text-anchor="middle">Long history</text>
-  <rect x="356" y="50" width="137.6" height="26" rx="13" fill="#ECECFF" stroke="#9370DB"/>
-  <text x="424.8" y="67.9" fill="#333333" text-anchor="middle">Popularisation</text>
-  <rect x="186" y="84" width="87.2" height="26" rx="13" fill="#ECECFF" stroke="#9370DB"/>
-  <text x="229.6" y="101.9" fill="#333333" text-anchor="middle">Research</text>
-  <rect x="356" y="84" width="150" height="26" rx="13" fill="#ECECFF" stroke="#9370DB"/>
-  <text x="431" y="101.9" fill="#333333" text-anchor="middle">On effectiveness</text>
-  <rect x="186" y="135" width="62" height="26" rx="13" fill="#ECECFF" stroke="#9370DB"/>
-  <text x="217" y="152.9" fill="#333333" text-anchor="middle">Tools</text>
-  <rect x="356" y="118" width="129.2" height="26" rx="13" fill="#ECECFF" stroke="#9370DB"/>
-  <text x="420.6" y="135.9" fill="#333333" text-anchor="middle">Pen and paper</text>
-  <rect x="356" y="152" width="87.2" height="26" rx="13" fill="#ECECFF" stroke="#9370DB"/>
-  <text x="399.6" y="169.9" fill="#333333" text-anchor="middle">Software</text>
+  <path d="M93.57,101 C139.78,101 139.78,50 186,50" fill="none" stroke="#333333"/>
+  <path d="M250.34,50 C303.17,50 303.17,33 356,33" fill="none" stroke="#333333"/>
+  <path d="M250.34,50 C303.17,50 303.17,67 356,67" fill="none" stroke="#333333"/>
+  <path d="M93.57,101 C139.78,101 139.78,101 186,101" fill="none" stroke="#333333"/>
+  <path d="M265.91,101 C310.95,101 310.95,101 356,101" fill="none" stroke="#333333"/>
+  <path d="M93.57,101 C139.78,101 139.78,152 186,152" fill="none" stroke="#333333"/>
+  <path d="M240.23,152 C298.12,152 298.12,135 356,135" fill="none" stroke="#333333"/>
+  <path d="M240.23,152 C298.12,152 298.12,169 356,169" fill="none" stroke="#333333"/>
+  <rect x="16" y="84" width="77.57" height="26" rx="13" fill="#ECECFF" stroke="#9370DB"/>
+  <text x="54.78" y="101.9" fill="#333333" text-anchor="middle">Mindmap</text>
+  <rect x="186" y="33" width="64.34" height="26" rx="13" fill="#ECECFF" stroke="#9370DB"/>
+  <text x="218.17" y="50.9" fill="#333333" text-anchor="middle">Origins</text>
+  <rect x="356" y="16" width="96.26" height="26" rx="13" fill="#ECECFF" stroke="#9370DB"/>
+  <text x="404.13" y="33.9" fill="#333333" text-anchor="middle">Long history</text>
+  <rect x="356" y="50" width="108.7" height="26" rx="13" fill="#ECECFF" stroke="#9370DB"/>
+  <text x="410.35" y="67.9" fill="#333333" text-anchor="middle">Popularisation</text>
+  <rect x="186" y="84" width="79.91" height="26" rx="13" fill="#ECECFF" stroke="#9370DB"/>
+  <text x="225.95" y="101.9" fill="#333333" text-anchor="middle">Research</text>
+  <rect x="356" y="84" width="124.27" height="26" rx="13" fill="#ECECFF" stroke="#9370DB"/>
+  <text x="418.14" y="101.9" fill="#333333" text-anchor="middle">On effectiveness</text>
+  <rect x="186" y="135" width="54.23" height="26" rx="13" fill="#ECECFF" stroke="#9370DB"/>
+  <text x="213.12" y="152.9" fill="#333333" text-anchor="middle">Tools</text>
+  <rect x="356" y="118" width="111.84" height="26" rx="13" fill="#ECECFF" stroke="#9370DB"/>
+  <text x="411.92" y="135.9" fill="#333333" text-anchor="middle">Pen and paper</text>
+  <rect x="356" y="152" width="75.24" height="26" rx="13" fill="#ECECFF" stroke="#9370DB"/>
+  <text x="393.62" y="169.9" fill="#333333" text-anchor="middle">Software</text>
 </svg>

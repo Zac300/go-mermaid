@@ -1,5 +1,7 @@
 package sequence
 
+import "github.com/Zac300/go-mermaid/internal/svgutil"
+
 // Options tunes sequence diagram spacing and metrics.
 type Options struct {
 	FontSize float64
@@ -27,12 +29,10 @@ const (
 
 // Compute assigns positions to participants and messages.
 func Compute(d *Diagram, opts Options) *Layout {
-	charW := opts.FontSize * 0.6
-
 	// Participant header widths and X centers, left to right.
 	var x float64
 	for _, p := range d.Participants {
-		w := float64(len([]rune(p.Label)))*charW + headerPadX*2
+		w := svgutil.TextWidth(p.Label, opts.FontSize) + headerPadX*2
 		if w < 60 {
 			w = 60
 		}
@@ -96,7 +96,7 @@ func rowY(lay *Layout, row int) float64 {
 
 // noteWidth estimates a note box width from its text.
 func noteWidth(text string, fontSize float64) float64 {
-	w := float64(len([]rune(text)))*fontSize*0.6 + 20
+	w := svgutil.TextWidth(text, fontSize) + 20
 	if w < 60 {
 		w = 60
 	}

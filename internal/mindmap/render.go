@@ -111,7 +111,7 @@ func writeNodes(b *strings.Builder, n *Node, o RenderOptions, pal theme.Palette)
 }
 
 func nodeWidth(n *Node, fontSize float64) float64 {
-	w := float64(len([]rune(n.Text)))*fontSize*0.6 + 20
+	w := svgutil.TextWidth(n.Text, fontSize) + 20
 	if w < 50 {
 		w = 50
 	}

@@ -149,15 +149,14 @@ func writeRel(b *strings.Builder, r *Rel, e *domain.Edge, pal theme.Palette) {
 }
 
 func nodeSize(n *Node, fontSize float64) domain.Size {
-	charW := fontSize * 0.6
-	maxLen := 0
+	maxW := 0.0
 	rs := rows(n)
 	for _, r := range rs {
-		if l := len([]rune(r)); l > maxLen {
-			maxLen = l
+		if wd := svgutil.TextWidth(r, fontSize); wd > maxW {
+			maxW = wd
 		}
 	}
-	w := float64(maxLen)*charW + 24
+	w := maxW + 24
 	if w < 110 {
 		w = 110
 	}

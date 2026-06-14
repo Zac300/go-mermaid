@@ -140,7 +140,7 @@ func writeTransition(b *strings.Builder, t *Transition, g *domain.Graph, pal the
 }
 
 func stateSize(s *State, fontSize float64) domain.Size {
-	w := float64(len([]rune(s.Label)))*fontSize*0.6 + 24
+	w := svgutil.TextWidth(s.Label, fontSize) + 24
 	if w < 50 {
 		w = 50
 	}

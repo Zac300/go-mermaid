@@ -53,7 +53,6 @@ func Compute(g *domain.Graph, opts Options) (*Result, error) {
 // own renderer) are left untouched.
 func sizeNodes(g *domain.Graph, opts Options) {
 	const padX, padY = 20.0, 14.0
-	charW := opts.FontSize * 0.6
 	for _, n := range g.Nodes {
 		if n.Size.W != 0 || n.Size.H != 0 {
 			continue
@@ -63,13 +62,13 @@ func sizeNodes(g *domain.Graph, opts Options) {
 			label = n.ID
 		}
 		lines := svgutil.SplitLines(label)
-		maxLine := 0
+		maxW := 0.0
 		for _, ln := range lines {
-			if l := len([]rune(ln)); l > maxLine {
-				maxLine = l
+			if wd := svgutil.TextWidth(ln, opts.FontSize); wd > maxW {
+				maxW = wd
 			}
 		}
-		w := float64(maxLine)*charW + padX*2
+		w := maxW + padX*2
 		h := opts.FontSize*float64(len(lines)) + padY*2
 		switch n.Shape {
 		case domain.ShapeCircle:

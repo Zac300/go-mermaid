@@ -31,6 +31,32 @@ var escaper = strings.NewReplacer(
 // Esc escapes text for safe inclusion in SVG/XML content and attributes.
 func Esc(s string) string { return escaper.Replace(s) }
 
+// helveticaAdvance holds advance widths (per 1000 em units) for printable
+// ASCII 32..126, approximating Helvetica/Arial. Used for label sizing so wide
+// glyphs (W, m, @) reserve more room than narrow ones (i, l, .).
+var helveticaAdvance = [95]int{
+	278, 278, 355, 556, 556, 889, 667, 191, 333, 333, 389, 584, 278, 333, 278, 278, // 32..47
+	556, 556, 556, 556, 556, 556, 556, 556, 556, 556, 278, 278, 584, 584, 584, 556, // 48..63
+	1015, 667, 667, 722, 722, 667, 611, 778, 722, 278, 500, 667, 556, 833, 722, 778, // 64..79
+	667, 778, 722, 667, 611, 722, 667, 944, 667, 667, 611, 278, 278, 278, 469, 556, // 80..95
+	333, 556, 556, 500, 556, 556, 278, 556, 556, 222, 222, 500, 222, 833, 556, 556, // 96..111
+	556, 556, 333, 500, 278, 556, 500, 722, 500, 500, 500, 334, 260, 334, 584, // 112..126
+}
+
+// TextWidth estimates the rendered width of s at the given font size using
+// per-character advance widths (falling back to 0.6em for non-ASCII runes).
+func TextWidth(s string, fontSize float64) float64 {
+	var em float64
+	for _, r := range s {
+		if r >= 32 && r <= 126 {
+			em += float64(helveticaAdvance[r-32]) / 1000
+		} else {
+			em += 0.6
+		}
+	}
+	return em * fontSize
+}
+
 // SplitLines splits label text on <br>, <br/>, <br /> and literal or escaped
 // newlines, returning at least one line.
 func SplitLines(s string) []string {
