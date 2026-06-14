@@ -26,6 +26,7 @@ const (
 	kindBlock
 	kindKanban
 	kindPacket
+	kindRadar
 )
 
 // detectKind inspects the first non-empty, non-comment line and maps its
@@ -78,6 +79,8 @@ func detectKind(src string) kind {
 			return kindKanban
 		case "packet-beta", "packet":
 			return kindPacket
+		case "radar-beta", "radar":
+			return kindRadar
 		default:
 			return kindUnknown
 		}

@@ -47,6 +47,7 @@ func DiagramTypes() []string {
 		"block-beta",
 		"kanban",
 		"packet-beta",
+		"radar-beta",
 	}
 }
 

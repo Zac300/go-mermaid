@@ -1,0 +1,24 @@
+<svg role="img" xmlns="http://www.w3.org/2000/svg" width="472" height="503.6" viewBox="0 0 472 503.6" font-family="sans-serif" font-size="14">
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <text x="236" y="30" fill="#333333" text-anchor="middle" font-weight="bold">Team Skills</text>
+  <path d="M236,230.1 L271.66,256.01 L258.04,297.94 L213.96,297.94 L200.34,256.01 Z" fill="none" stroke="#9370DB" stroke-opacity="0.4"/>
+  <path d="M236,192.6 L307.33,244.42 L280.08,328.28 L191.92,328.28 L164.67,244.42 Z" fill="none" stroke="#9370DB" stroke-opacity="0.4"/>
+  <path d="M236,155.1 L342.99,232.84 L302.13,358.61 L169.87,358.61 L129.01,232.84 Z" fill="none" stroke="#9370DB" stroke-opacity="0.4"/>
+  <path d="M236,117.6 L378.66,221.25 L324.17,388.95 L147.83,388.95 L93.34,221.25 Z" fill="none" stroke="#9370DB" stroke-opacity="0.4"/>
+  <line x1="236" y1="267.6" x2="236" y2="117.6" stroke="#9370DB" stroke-opacity="0.4"/>
+  <text x="236" y="99.6" fill="#333333" text-anchor="middle">Speed</text>
+  <line x1="236" y1="267.6" x2="378.66" y2="221.25" stroke="#9370DB" stroke-opacity="0.4"/>
+  <text x="395.78" y="215.69" fill="#333333" text-anchor="middle">Power</text>
+  <line x1="236" y1="267.6" x2="324.17" y2="388.95" stroke="#9370DB" stroke-opacity="0.4"/>
+  <text x="334.75" y="403.51" fill="#333333" text-anchor="middle">Range</text>
+  <line x1="236" y1="267.6" x2="147.83" y2="388.95" stroke="#9370DB" stroke-opacity="0.4"/>
+  <text x="137.25" y="403.51" fill="#333333" text-anchor="middle">Stealth</text>
+  <line x1="236" y1="267.6" x2="93.34" y2="221.25" stroke="#9370DB" stroke-opacity="0.4"/>
+  <text x="76.22" y="215.69" fill="#333333" text-anchor="middle">Armor</text>
+  <path d="M236,134.27 L331.11,236.7 L324.17,388.95 L196.81,321.53 L125.04,231.55 Z" fill="#5B8FF9" fill-opacity="0.2" stroke="#5B8FF9" stroke-width="2"/>
+  <path d="M236,184.27 L378.66,221.25 L275.19,321.53 L167.43,361.99 L140.89,236.7 Z" fill="#F6903D" fill-opacity="0.2" stroke="#F6903D" stroke-width="2"/>
+  <rect x="16" y="47.6" width="14" height="14" fill="#5B8FF9"/>
+  <text x="35" y="59.5" fill="#333333">Team A</text>
+  <rect x="16" y="67.6" width="14" height="14" fill="#F6903D"/>
+  <text x="35" y="79.5" fill="#333333">Team B</text>
+</svg>

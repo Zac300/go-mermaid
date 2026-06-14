@@ -42,6 +42,7 @@ import (
 	"github.com/Zac300/go-mermaid/internal/parser"
 	"github.com/Zac300/go-mermaid/internal/pie"
 	"github.com/Zac300/go-mermaid/internal/quadrant"
+	"github.com/Zac300/go-mermaid/internal/radar"
 	"github.com/Zac300/go-mermaid/internal/render"
 	"github.com/Zac300/go-mermaid/internal/requirement"
 	"github.com/Zac300/go-mermaid/internal/sankey"
@@ -170,6 +171,11 @@ func Render(src string, opts ...Option) (out []byte, err error) {
 		err = wrapParse(err)
 	case kindPacket:
 		raw, err = packet.Render(body, packet.RenderOptions{
+			Theme: string(cfg.theme), FontFace: cfg.fontFace, FontSize: cfg.fontSize, Padding: cfg.padding, Title: title,
+		})
+		err = wrapParse(err)
+	case kindRadar:
+		raw, err = radar.Render(body, radar.RenderOptions{
 			Theme: string(cfg.theme), FontFace: cfg.fontFace, FontSize: cfg.fontSize, Padding: cfg.padding, Title: title,
 		})
 		err = wrapParse(err)
