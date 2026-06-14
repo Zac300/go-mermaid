@@ -150,8 +150,7 @@ func writeRelation(b *strings.Builder, r *Relation, e *domain.Edge, pal theme.Pa
 	writeHead(b, r.Right, pn, rdx, rdy, pal)
 
 	if r.Label != "" {
-		lp0, lpn := e.Points[0], e.Points[len(e.Points)-1]
-		mid := domain.Point{X: (lp0.X + lpn.X) / 2, Y: (lp0.Y + lpn.Y) / 2}
+		mid := domain.PolylineMidpoint(e.Points)
 		fmt.Fprintf(b, `    <text x="%s" y="%s" fill="%s" text-anchor="middle" dy="-2">%s</text>`,
 			svgutil.Num(mid.X), svgutil.Num(mid.Y), pal.Text, svgutil.Esc(r.Label))
 		b.WriteByte('\n')

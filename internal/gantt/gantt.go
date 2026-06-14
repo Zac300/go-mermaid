@@ -26,8 +26,10 @@ type Task struct {
 	AfterID string
 	StartIn string // raw start date token (empty if "after")
 	Days    int
+	Line    int // source line, for error reporting
 
-	Start time.Time
+	Start    time.Time
+	resolved bool
 }
 
 // End returns the day after the task's last day.
@@ -92,7 +94,7 @@ func parseTask(line, section string, lineNo int) (*Task, error) {
 	if !ok {
 		return nil, syntax.Errorf(lineNo, 1, "expected 'name: spec'")
 	}
-	t := &Task{Name: strings.TrimSpace(name), Section: section}
+	t := &Task{Name: strings.TrimSpace(name), Section: section, Line: lineNo}
 	for _, f := range strings.Split(rest, ",") {
 		f = strings.TrimSpace(f)
 		switch {
@@ -114,24 +116,49 @@ func parseTask(line, section string, lineNo int) (*Task, error) {
 }
 
 // resolve computes each task's Start from its date or "after" dependency.
+// Dependencies resolve to a fixpoint so "after" may reference a task defined
+// later; bad dates and unknown/circular dependencies are reported rather than
+// silently leaving a task at the zero time (which drops its bar).
 func (d *Diagram) resolve() error {
 	byID := map[string]*Task{}
 	for _, t := range d.Tasks {
-		switch {
-		case t.AfterID != "":
-			if dep, ok := byID[t.AfterID]; ok {
-				t.Start = dep.End()
-			}
-		case t.StartIn != "":
-			if v, err := time.Parse(d.Layout, t.StartIn); err == nil {
-				t.Start = v
-			}
-		}
 		if t.ID != "" {
 			byID[t.ID] = t
 		}
 	}
-	return nil
+	for _, t := range d.Tasks {
+		if t.StartIn == "" {
+			continue
+		}
+		v, err := time.Parse(d.Layout, t.StartIn)
+		if err != nil {
+			return syntax.Errorf(t.Line, 1, "task %q has invalid start date %q", t.Name, t.StartIn)
+		}
+		t.Start, t.resolved = v, true
+	}
+	for {
+		progress, pending := false, (*Task)(nil)
+		for _, t := range d.Tasks {
+			if t.AfterID == "" || t.resolved {
+				continue
+			}
+			dep, ok := byID[t.AfterID]
+			if !ok {
+				return syntax.Errorf(t.Line, 1, "task %q depends on unknown task %q", t.Name, t.AfterID)
+			}
+			if dep.resolved {
+				t.Start, t.resolved, progress = dep.End(), true, true
+			} else {
+				pending = t
+			}
+		}
+		if pending == nil {
+			return nil
+		}
+		if !progress {
+			return syntax.Errorf(pending.Line, 1, "circular task dependency at %q", pending.Name)
+		}
+	}
 }
 
 // Bounds returns the earliest start and latest end across tasks.

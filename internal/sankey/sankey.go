@@ -54,6 +54,9 @@ func Parse(src string) (*Diagram, error) {
 		if err != nil {
 			return nil, syntax.Errorf(lineNo, 1, "invalid flow value")
 		}
+		if v < 0 {
+			return nil, syntax.Errorf(lineNo, 1, "flow value must not be negative")
+		}
 		s, tgt := strings.TrimSpace(fields[0]), strings.TrimSpace(fields[1])
 		d.addNode(s)
 		d.addNode(tgt)

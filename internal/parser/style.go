@@ -76,14 +76,45 @@ func parseClick(line string) (id, url string) {
 			url = line[i+1 : i+1+j]
 		}
 	}
+	if !safeURL(url) {
+		url = ""
+	}
 	return id, url
+}
+
+// safeURL reports whether a click target is safe to emit as an href. Only
+// http(s), mailto, and same-document/relative links are allowed; schemes like
+// javascript: are rejected so a diagram can't smuggle script into the SVG.
+func safeURL(u string) bool {
+	u = strings.TrimSpace(u)
+	if u == "" {
+		return false
+	}
+	lower := strings.ToLower(u)
+	switch {
+	case strings.HasPrefix(lower, "http://"), strings.HasPrefix(lower, "https://"),
+		strings.HasPrefix(lower, "mailto:"):
+		return true
+	case strings.HasPrefix(u, "/"), strings.HasPrefix(u, "#"), strings.HasPrefix(u, "./"),
+		strings.HasPrefix(u, "../"):
+		return true
+	}
+	// A bare relative path with no scheme (no colon before the first / or #) is
+	// fine; a colon earlier than any path separator implies a scheme we don't
+	// trust.
+	colon := strings.IndexByte(u, ':')
+	if colon < 0 {
+		return true
+	}
+	slash := strings.IndexAny(u, "/#")
+	return slash >= 0 && slash < colon
 }
 
 // stripInline removes ":::class" occurrences, recording each as an assignment
 // to the node that precedes it (looking past any shape brackets).
 func stripInline(line string, pending *[]classAssign) string {
 	for {
-		idx := strings.Index(line, ":::")
+		idx := topLevelTripleColon(line)
 		if idx < 0 {
 			return line
 		}
@@ -97,6 +128,37 @@ func stripInline(line string, pending *[]classAssign) string {
 		}
 		line = line[:idx] + line[j:]
 	}
+}
+
+// topLevelTripleColon returns the index of the first ":::" that sits outside any
+// shape bracket or quoted label, or -1. This keeps a literal ":::" inside a node
+// label from being mistaken for an inline class assignment.
+func topLevelTripleColon(s string) int {
+	depth, inQuote := 0, false
+	for i := 0; i+2 < len(s); i++ {
+		c := s[i]
+		if inQuote {
+			if c == '"' {
+				inQuote = false
+			}
+			continue
+		}
+		switch c {
+		case '"':
+			inQuote = true
+		case '[', '(', '{':
+			depth++
+		case ']', ')', '}':
+			if depth > 0 {
+				depth--
+			}
+		case ':':
+			if depth == 0 && s[i+1] == ':' && s[i+2] == ':' {
+				return i
+			}
+		}
+	}
+	return -1
 }
 
 // nodeIDBefore returns the node identifier ending at idx, skipping a trailing
