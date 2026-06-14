@@ -116,13 +116,24 @@ func spreadPorts(g *domain.Graph, vertical bool) {
 	}
 	byNode := map[string][]touch{}
 	for _, e := range g.Edges {
-		if e.From == e.To || len(e.Points) < 2 || pairCount[pairKey(e.From, e.To)] > 1 {
+		// Need a real interior elbow (>=4 points): the shift moves the endpoint
+		// and the adjacent elbow only. With <4 points the "adjacent" index is the
+		// far endpoint, so spreading would drag the other node's attach point and
+		// the two ends would fight over a shared index (order-dependent output).
+		if e.From == e.To || len(e.Points) < 4 || pairCount[pairKey(e.From, e.To)] > 1 {
 			continue
 		}
 		byNode[e.From] = append(byNode[e.From], touch{e, 0})
 		byNode[e.To] = append(byNode[e.To], touch{e, len(e.Points) - 1})
 	}
-	for id, ts := range byNode {
+	// Iterate nodes in a stable order so output never depends on map iteration.
+	ids := make([]string, 0, len(byNode))
+	for id := range byNode {
+		ids = append(ids, id)
+	}
+	sort.Strings(ids)
+	for _, id := range ids {
+		ts := byNode[id]
 		n := g.NodeByID(id)
 		if n == nil {
 			continue

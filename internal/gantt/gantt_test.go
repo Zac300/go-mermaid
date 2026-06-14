@@ -56,7 +56,7 @@ func TestParse(t *testing.T) {
 
 func TestRender(t *testing.T) {
 	Convey("Given a gantt, when rendering", t, func() {
-		out, err := Render("gantt\ntitle P\ndateFormat YYYY-MM-DD\nsection S\nA : 2024-01-01, 5d\nB : after a, 3d",
+		out, err := Render("gantt\ntitle P\ndateFormat YYYY-MM-DD\nsection S\nA : a, 2024-01-01, 5d\nB : after a, 3d",
 			RenderOptions{Theme: "default", FontSize: 14, Padding: 16})
 		svg := string(out)
 

@@ -59,18 +59,19 @@ func drawText(img *image.RGBA, svg string, scale, rootSize float64) {
 		size := sizeOf(attrs["font-size"], rootSize)
 		bold := attrs["font-weight"] == "bold"
 		anchor := attrs["text-anchor"]
+		dy := numAttr(attrs["dy"], "0") // baseline shift, e.g. dy="-2" on labels
 
 		if strings.Contains(inner, "<tspan") {
 			for _, ts := range tspanRe.FindAllStringSubmatch(inner, -1) {
 				ta := parseAttrs(ts[1])
 				x := numAttr(ta["x"], attrs["x"])
-				y := numAttr(ta["y"], attrs["y"])
+				y := numAttr(ta["y"], attrs["y"]) + numAttr(ta["dy"], "0") + dy
 				drawString(img, xhtml.UnescapeString(ts[2]), x+ox, y+oy, size, scale, fill, bold, anchor)
 			}
 			continue
 		}
 		x := numAttr(attrs["x"], "0")
-		y := numAttr(attrs["y"], "0")
+		y := numAttr(attrs["y"], "0") + dy
 		if m := rotateRe.FindStringSubmatch(attrs["transform"]); m != nil {
 			ang, _ := strconv.ParseFloat(m[1], 64)
 			cx, cy := x, y

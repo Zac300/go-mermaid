@@ -22,12 +22,14 @@ type parser struct {
 	pos      int
 	graph    *domain.Graph
 	seen     map[string]*domain.Node
+	subOf    map[string]bool // node IDs already claimed by a subgraph
 	subStack []*domain.Subgraph
 }
 
 func (p *parser) parse() (*domain.Graph, error) {
 	p.graph = &domain.Graph{Direction: domain.TopBottom}
 	p.seen = map[string]*domain.Node{}
+	p.subOf = map[string]bool{}
 
 	p.skipNewlines()
 	if err := p.parseHeader(); err != nil {
@@ -172,10 +174,13 @@ func (p *parser) parseNodeRef() (*domain.Node, error) {
 		node = &domain.Node{ID: idTok.Val, Label: idTok.Val, Shape: domain.ShapeRect}
 		p.seen[idTok.Val] = node
 		p.graph.Nodes = append(p.graph.Nodes, node)
-		if n := len(p.subStack); n > 0 {
-			top := p.subStack[n-1]
-			top.NodeIDs = append(top.NodeIDs, node.ID)
-		}
+	}
+	// Assign membership to the innermost subgraph the node appears in, even if
+	// it was declared earlier outside; claim it once so it lands in one cluster.
+	if n := len(p.subStack); n > 0 && !p.subOf[node.ID] {
+		top := p.subStack[n-1]
+		top.NodeIDs = append(top.NodeIDs, node.ID)
+		p.subOf[node.ID] = true
 	}
 
 	if p.at(lexer.ShapeOpen) {

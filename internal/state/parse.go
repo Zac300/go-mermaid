@@ -33,7 +33,10 @@ func Parse(src string) (*Diagram, error) {
 			name := strings.TrimSpace(strings.TrimSuffix(strings.TrimPrefix(line, "state "), "{"))
 			d.ensureState(stateName(name))
 			i = skipBlock(lines, i+1)
-		case strings.Contains(line, "-->"):
+		// A transition has "-->"; but a description like `S : text --> more`
+		// also contains it, so only treat the line as a transition when the
+		// arrow comes before any ':' (which would start a description).
+		case isTransition(line):
 			d.parseTransition(line)
 		case strings.Contains(line, ":"):
 			d.parseDescription(line)
@@ -97,6 +100,18 @@ func skipBlock(lines []string, start int) int {
 		}
 	}
 	return len(lines) - 1
+}
+
+// isTransition reports whether a line is a transition (`A --> B`) rather than a
+// description (`A : text`). When both delimiters appear, the one that comes
+// first wins, so `S : note about --> arrows` stays a description.
+func isTransition(line string) bool {
+	a := strings.Index(line, "-->")
+	if a < 0 {
+		return false
+	}
+	c := strings.Index(line, ":")
+	return c < 0 || a < c
 }
 
 func firstWord(s string) string {

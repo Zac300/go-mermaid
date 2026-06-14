@@ -13,6 +13,9 @@ func assignRanks(g *domain.Graph) map[string]int {
 		indeg[n.ID] = 0
 	}
 	for _, e := range g.Edges {
+		if e.From == e.To {
+			continue // self-loops don't constrain ranking; routed as a side loop
+		}
 		preds[e.To] = append(preds[e.To], e.From)
 		indeg[e.To]++
 	}

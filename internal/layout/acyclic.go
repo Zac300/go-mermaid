@@ -20,6 +20,9 @@ func makeAcyclic(g *domain.Graph) []*domain.Edge {
 	visit = func(id string) {
 		state[id] = gray
 		for _, e := range out[id] {
+			if e.From == e.To {
+				continue // self-loop: not a cycle to break, routed separately
+			}
 			switch state[e.To] {
 			case gray:
 				// back edge: reverse it to break the cycle
