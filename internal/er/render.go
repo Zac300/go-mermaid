@@ -42,7 +42,7 @@ func Render(src string, o RenderOptions) ([]byte, error) {
 		g.Edges = append(g.Edges, &domain.Edge{From: r.From, To: r.To, Label: r.Label})
 	}
 
-	res, err := layout.Compute(g, layout.Options{NodeSep: 55, RankSep: 65, FontSize: o.FontSize})
+	res, err := layout.Compute(g, layout.Options{NodeSep: 55, RankSep: 95, FontSize: o.FontSize})
 	if err != nil {
 		return nil, err
 	}
@@ -133,7 +133,8 @@ func writeRelationship(b *strings.Builder, r *Relationship, e *domain.Edge, pal 
 	writeCrow(b, r.RightKind, e.Points[last], e.Points[last-1], pal)
 
 	if r.Label != "" {
-		mid := e.Points[len(e.Points)/2]
+		lp0, lpn := e.Points[0], e.Points[len(e.Points)-1]
+		mid := domain.Point{X: (lp0.X + lpn.X) / 2, Y: (lp0.Y + lpn.Y) / 2}
 		fmt.Fprintf(b, `    <text x="%s" y="%s" fill="%s" text-anchor="middle" dy="-2">%s</text>`,
 			svgutil.Num(mid.X), svgutil.Num(mid.Y), pal.Text, svgutil.Esc(r.Label))
 		b.WriteByte('\n')

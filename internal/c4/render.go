@@ -50,7 +50,7 @@ func Render(src string, o RenderOptions) ([]byte, error) {
 	for _, r := range d.Rels {
 		g.Edges = append(g.Edges, &domain.Edge{From: r.From, To: r.To, Label: r.Label})
 	}
-	res, err := layout.Compute(g, layout.Options{NodeSep: 60, RankSep: 70, FontSize: o.FontSize})
+	res, err := layout.Compute(g, layout.Options{NodeSep: 60, RankSep: 100, FontSize: o.FontSize})
 	if err != nil {
 		return nil, err
 	}
@@ -135,7 +135,8 @@ func writeRel(b *strings.Builder, r *Rel, e *domain.Edge, pal theme.Palette) {
 		strings.TrimSpace(d.String()), pal.Edge)
 	b.WriteByte('\n')
 	if r.Label != "" {
-		mid := e.Points[len(e.Points)/2]
+		lp0, lpn := e.Points[0], e.Points[len(e.Points)-1]
+		mid := domain.Point{X: (lp0.X + lpn.X) / 2, Y: (lp0.Y + lpn.Y) / 2}
 		fmt.Fprintf(b, `    <text x="%s" y="%s" fill="%s" text-anchor="middle" dy="-2">%s</text>`,
 			svgutil.Num(mid.X), svgutil.Num(mid.Y), pal.Text, svgutil.Esc(r.Label))
 		b.WriteByte('\n')

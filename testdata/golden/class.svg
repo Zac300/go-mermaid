@@ -1,9 +1,9 @@
-<svg role="img" xmlns="http://www.w3.org/2000/svg" width="256.3" height="220" viewBox="0 0 256.3 220" font-family="sans-serif" font-size="14">
+<svg role="img" xmlns="http://www.w3.org/2000/svg" width="256.3" height="250" viewBox="0 0 256.3 250" font-family="sans-serif" font-size="14">
   <rect width="100%" height="100%" fill="#ffffff"/>
   <g transform="translate(16,16)">
-    <path d="M115.72,84 L115.72,104 L47.15,104 L47.15,144" fill="none" stroke="#333333"/>
+    <path d="M115.72,84 L115.72,119 L47.15,119 L47.15,174" fill="none" stroke="#333333"/>
     <path d="M115.72,84 L109.72,96 L121.72,96 Z" fill="#ffffff" stroke="#333333"/>
-    <path d="M115.72,84 L115.72,104 L184.3,104 L184.3,154" fill="none" stroke="#333333"/>
+    <path d="M115.72,84 L115.72,119 L184.3,119 L184.3,184" fill="none" stroke="#333333"/>
     <path d="M115.72,84 L109.72,90 L115.72,96 L121.72,90 Z" fill="#333333" stroke="#333333"/>
     <rect x="49.91" y="0" width="131.62" height="84" fill="#ECECFF" stroke="#9370DB"/>
     <text x="115.72" y="14" fill="#333333" text-anchor="middle" font-weight="bold">Animal</text>
@@ -12,11 +12,11 @@
     <text x="59.91" y="61" fill="#333333">+String name</text>
     <line x1="49.91" y1="64" x2="181.53" y2="64" stroke="#9370DB"/>
     <text x="59.91" y="81" fill="#333333">+isMammal() bool</text>
-    <rect x="0" y="144" width="94.3" height="44" fill="#ECECFF" stroke="#9370DB"/>
-    <text x="47.15" y="158" fill="#333333" text-anchor="middle" font-weight="bold">Dog</text>
-    <line x1="0" y1="168" x2="94.3" y2="168" stroke="#9370DB"/>
-    <text x="10" y="185" fill="#333333">+bark() void</text>
-    <rect x="144.3" y="154" width="80" height="24" fill="#ECECFF" stroke="#9370DB"/>
-    <text x="184.3" y="168" fill="#333333" text-anchor="middle" font-weight="bold">Leg</text>
+    <rect x="0" y="174" width="94.3" height="44" fill="#ECECFF" stroke="#9370DB"/>
+    <text x="47.15" y="188" fill="#333333" text-anchor="middle" font-weight="bold">Dog</text>
+    <line x1="0" y1="198" x2="94.3" y2="198" stroke="#9370DB"/>
+    <text x="10" y="215" fill="#333333">+bark() void</text>
+    <rect x="144.3" y="184" width="80" height="24" fill="#ECECFF" stroke="#9370DB"/>
+    <text x="184.3" y="198" fill="#333333" text-anchor="middle" font-weight="bold">Leg</text>
   </g>
 </svg>
