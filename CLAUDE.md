@@ -145,5 +145,5 @@ The flowchart layout is Sugiyama-style: cycle removal, longest-path ranking,
 median crossing minimization with dummy nodes for long edges, and barycenter
 x-positioning. Edges are orthogonal by default with an optional curved mode.
 Ranking is still longest-path (network-simplex would tighten it). Remaining
-ideas: network-simplex ranking, spline routing, and PNG export. Keep new code
+ideas: network-simplex ranking and spline routing (PNG export now lives in the raster subpackage). Keep new code
 behind the existing stage interfaces so these land without API churn.

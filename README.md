@@ -77,6 +77,18 @@ mermaid a.mmd b.mmd c.mmd      # batch: writes a.svg, b.svg, c.svg
 mermaid -list-types            # list supported diagram types
 mermaid -list-themes           # list themes
 mermaid serve -addr :8080      # HTTP render endpoint (POST source, or GET ?src=)
+mermaid -png -scale 2 -o d.png d.mmd   # PNG output (rasterized)
+```
+
+### PNG output
+
+The core library is dependency-free and emits SVG. PNG rasterization lives in
+a separate package so only PNG users pull the rasterizer dependency:
+
+```go
+import "github.com/Zac300/go-mermaid/raster"
+
+img, err := raster.PNG("graph TD\n A --> B", 2) // 2 = scale factor
 ```
 
 ## Error handling
@@ -182,7 +194,7 @@ Rendering is fast — roughly 10–50µs per diagram with no external processes.
 - [x] CLI batch render, `serve` HTTP mode, fuzz-tested parsers
 - [ ] Network-simplex ranking (tighter flowchart layouts)
 - [ ] Spline edge routing
-- [ ] PNG output
+- [x] PNG output (raster subpackage)
 
 ## Architecture
 

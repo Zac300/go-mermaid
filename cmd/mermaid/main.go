@@ -23,6 +23,7 @@ import (
 	"strings"
 
 	mermaid "github.com/Zac300/go-mermaid"
+	"github.com/Zac300/go-mermaid/raster"
 )
 
 // version is set at build time via -ldflags "-X main.version=...".
@@ -52,6 +53,8 @@ func run() error {
 	showVersion := flag.Bool("version", false, "print version and exit")
 	listThemes := flag.Bool("list-themes", false, "list available themes and exit")
 	listTypes := flag.Bool("list-types", false, "list supported diagram types and exit")
+	pngOut := flag.Bool("png", false, "output PNG instead of SVG")
+	scale := flag.Float64("scale", 1, "PNG scale factor")
 	flag.Usage = usage
 	flag.Parse()
 
@@ -75,43 +78,56 @@ func run() error {
 		mermaid.WithTheme(mermaid.Theme(*theme)),
 		mermaid.WithPadding(*padding),
 	}
+	asPNG := *pngOut || strings.HasSuffix(*out, ".png")
 
 	args := flag.Args()
 	if len(args) > 1 {
 		if *out != "" {
 			return fmt.Errorf("-o cannot be used with multiple input files")
 		}
-		return renderBatch(args, opts)
+		return renderBatch(args, opts, asPNG, *scale)
 	}
 
 	src, err := readInput(firstArg(args))
 	if err != nil {
 		return err
 	}
-	svg, err := mermaid.Render(string(src), opts...)
+	data, err := renderBytes(string(src), opts, asPNG, *scale)
 	if err != nil {
 		return err
 	}
 	if *out == "" || *out == "-" {
-		_, err = os.Stdout.Write(svg)
+		_, err = os.Stdout.Write(data)
 		return err
 	}
-	return os.WriteFile(*out, svg, 0o644)
+	return os.WriteFile(*out, data, 0o644)
 }
 
-// renderBatch renders each input file to a sibling .svg file.
-func renderBatch(files []string, opts []mermaid.Option) error {
+// renderBytes produces SVG or PNG bytes for the given source.
+func renderBytes(src string, opts []mermaid.Option, asPNG bool, scale float64) ([]byte, error) {
+	if asPNG {
+		return raster.PNG(src, scale, opts...)
+	}
+	return mermaid.Render(src, opts...)
+}
+
+// renderBatch renders each input file to a sibling .svg or .png file.
+func renderBatch(files []string, opts []mermaid.Option, asPNG bool, scale float64) error {
+	ext := ".svg"
+	if asPNG {
+		ext = ".png"
+	}
 	for _, f := range files {
 		src, err := os.ReadFile(f)
 		if err != nil {
 			return err
 		}
-		svg, err := mermaid.Render(string(src), opts...)
+		data, err := renderBytes(string(src), opts, asPNG, scale)
 		if err != nil {
 			return fmt.Errorf("%s: %w", f, err)
 		}
-		dst := strings.TrimSuffix(f, filepath.Ext(f)) + ".svg"
-		if err := os.WriteFile(dst, svg, 0o644); err != nil {
+		dst := strings.TrimSuffix(f, filepath.Ext(f)) + ext
+		if err := os.WriteFile(dst, data, 0o644); err != nil {
 			return err
 		}
 		fmt.Fprintln(os.Stderr, "wrote", dst)
