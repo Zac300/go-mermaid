@@ -14,7 +14,7 @@
     <text fill="#333333" text-anchor="middle"><tspan x="38.28" y="25.9">Fetch</tspan></text>
     <rect x="0" y="92" width="76.57" height="42" fill="#ECECFF" stroke="#9370DB"/>
     <text fill="#333333" text-anchor="middle"><tspan x="38.28" y="117.9">Parse</tspan></text>
-    <path d="M8.56,189.04 L8.56,220.96 A29.72,5.04 0 0 0 68.01,220.96 A29.72,5.04 0 0 0 8.56,189.04 Z" fill="#ECECFF" stroke="#9370DB"/><path d="M8.56,189.04 A29.72,5.04 0 0 0 68.01,189.04" fill="none" stroke="#9370DB"/>
+    <path d="M8.56,189.04 L8.56,220.96 A29.72,5.04 0 0 0 68.01,220.96 L68.01,189.04 A29.72,5.04 0 0 0 8.56,189.04 Z" fill="#ECECFF" stroke="#9370DB"/><path d="M8.56,189.04 A29.72,5.04 0 0 0 68.01,189.04" fill="none" stroke="#9370DB"/>
     <text fill="#333333" text-anchor="middle"><tspan x="38.28" y="209.9">DB</tspan></text>
     <rect x="1.16" y="276" width="74.24" height="42" fill="#ECECFF" stroke="#9370DB"/>
     <text fill="#333333" text-anchor="middle"><tspan x="38.28" y="301.9">Index</tspan></text>

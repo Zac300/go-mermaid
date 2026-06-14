@@ -9,7 +9,7 @@
     <path d="M84.18,410 L84.18,460" fill="none" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
     <rect x="30.32" y="0" width="107.7" height="42" fill="#ECECFF" stroke="#9370DB"/><line x1="36.32" y1="0" x2="36.32" y2="42" stroke="#9370DB"/><line x1="132.03" y1="0" x2="132.03" y2="42" stroke="#9370DB"/>
     <text fill="#333333" text-anchor="middle"><tspan x="84.18" y="25.9">Subroutine</tspan></text>
-    <path d="M34.22,97.04 L34.22,128.96 A49.96,5.04 0 0 0 134.14,128.96 A49.96,5.04 0 0 0 34.22,97.04 Z" fill="#ECECFF" stroke="#9370DB"/><path d="M34.22,97.04 A49.96,5.04 0 0 0 134.14,97.04" fill="none" stroke="#9370DB"/>
+    <path d="M34.22,97.04 L34.22,128.96 A49.96,5.04 0 0 0 134.14,128.96 L134.14,97.04 A49.96,5.04 0 0 0 34.22,97.04 Z" fill="#ECECFF" stroke="#9370DB"/><path d="M34.22,97.04 A49.96,5.04 0 0 0 134.14,97.04" fill="none" stroke="#9370DB"/>
     <text fill="#333333" text-anchor="middle"><tspan x="84.18" y="117.9">Database</tspan></text>
     <polygon points="15.16,205 36.16,184 132.19,184 153.19,205 132.19,226 36.16,226" fill="#ECECFF" stroke="#9370DB"/>
     <text fill="#333333" text-anchor="middle"><tspan x="84.18" y="209.9">Hexagon</tspan></text>
