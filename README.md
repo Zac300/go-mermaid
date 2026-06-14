@@ -14,6 +14,22 @@ single static binary.
 > the [table below](#diagram-types)). Not affiliated with the Mermaid project;
 > this is an independent, compatible renderer.
 
+## Gallery
+
+Rendered by go-mermaid (PNG at 2x):
+
+| Flowchart | Sequence | Class |
+| --- | --- | --- |
+| ![flowchart](docs/gallery/simple.png) | ![sequence](docs/gallery/sequence.png) | ![class](docs/gallery/class.png) |
+
+| State | ER | Pie |
+| --- | --- | --- |
+| ![state](docs/gallery/state.png) | ![er](docs/gallery/er.png) | ![pie](docs/gallery/pie.png) |
+
+| Gantt | Git graph | Mindmap |
+| --- | --- | --- |
+| ![gantt](docs/gallery/gantt.png) | ![gitgraph](docs/gallery/gitgraph.png) | ![mindmap](docs/gallery/mindmap.png) |
+
 ## Why
 
 Every existing Go path to Mermaid SVG shells out to headless Chrome or a Node
@@ -201,7 +217,7 @@ Rendering is fast — roughly 10–50µs per diagram with no external processes.
 
 ### Before the first tagged release (v0.1.0)
 
-- [ ] README examples gallery (sample SVG/PNG per diagram type)
+- [x] README examples gallery (sample PNG per diagram type)
 - [ ] Font-metric-aware label sizing (proportional fonts can overflow boxes)
 - [ ] Custom theme registration (user-supplied palette)
 - [ ] API review pass (lock the option set we want to keep stable)
