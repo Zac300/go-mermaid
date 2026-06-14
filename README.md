@@ -218,7 +218,7 @@ Rendering is fast — roughly 10–50µs per diagram with no external processes.
 ### Before the first tagged release (v0.1.0)
 
 - [x] README examples gallery (sample PNG per diagram type)
-- [ ] Font-metric-aware label sizing (proportional fonts can overflow boxes)
+- [x] Font-metric-aware label sizing (Helvetica advance widths)
 - [ ] Custom theme registration (user-supplied palette)
 - [ ] API review pass (lock the option set we want to keep stable)
 - [ ] CONTRIBUTING/issue-template polish and a CHANGELOG seeded by release-please

@@ -152,7 +152,6 @@ ideas: network-simplex ranking and spline routing (PNG export now lives in the
 raster subpackage). Keep new code behind the existing stage interfaces so these
 land without API churn.
 
-Known limitation: node/label sizing estimates text width as
-`runes * fontSize * 0.6`, which overflows for wide proportional glyphs — a
-font-metric-aware measure is the main quality item before v0.1.0. See the
-README roadmap for the full pre-release list.
+Label sizing uses `svgutil.TextWidth` (Helvetica advance widths, dependency-
+free) so wide glyphs reserve room correctly; non-ASCII falls back to a 0.6em
+estimate. See the README roadmap for the remaining pre-release list.
